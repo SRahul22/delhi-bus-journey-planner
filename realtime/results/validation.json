@@ -1,0 +1,227 @@
+{
+ "replay_day": "2026-10-28",
+ "replay_file_mb": 73.2,
+ "stats": {
+  "pings": 6711007,
+  "obs": 1341204,
+  "passings": 1466611
+ },
+ "lead_0_30min": {
+  "n": 129445,
+  "historical": {
+   "median_ape": 11.7,
+   "within_20pct": 71.6,
+   "median_bias_pct": -6.3
+  },
+  "live": {
+   "median_ape": 11.7,
+   "within_20pct": 72.1,
+   "median_bias_pct": -1.6
+  },
+  "live_better_share": 53.9
+ },
+ "lead_30_60min": {
+  "n": 128163,
+  "historical": {
+   "median_ape": 11.9,
+   "within_20pct": 71.1,
+   "median_bias_pct": -6.3
+  },
+  "live": {
+   "median_ape": 11.6,
+   "within_20pct": 72.2,
+   "median_bias_pct": -3.9
+  },
+  "live_better_share": 57.7
+ },
+ "by_eval_time_lead_0_30": {
+  "07:00": {
+   "n": 4509,
+   "hist": 8.2,
+   "live": 8.6,
+   "city_ratio": 1.043
+  },
+  "07:30": {
+   "n": 5116,
+   "hist": 9.1,
+   "live": 9.6,
+   "city_ratio": 1.0
+  },
+  "08:00": {
+   "n": 6086,
+   "hist": 8.3,
+   "live": 10.7,
+   "city_ratio": 1.078
+  },
+  "08:30": {
+   "n": 6131,
+   "hist": 10.2,
+   "live": 10.7,
+   "city_ratio": 1.011
+  },
+  "09:00": {
+   "n": 5702,
+   "hist": 9.9,
+   "live": 10.1,
+   "city_ratio": 1.05
+  },
+  "09:30": {
+   "n": 4516,
+   "hist": 10.6,
+   "live": 10.1,
+   "city_ratio": 1.028
+  },
+  "10:00": {
+   "n": 4466,
+   "hist": 10.5,
+   "live": 10.2,
+   "city_ratio": 1.063
+  },
+  "10:30": {
+   "n": 4841,
+   "hist": 10.5,
+   "live": 10.6,
+   "city_ratio": 1.057
+  },
+  "11:00": {
+   "n": 5028,
+   "hist": 11.2,
+   "live": 11.2,
+   "city_ratio": 1.049
+  },
+  "11:30": {
+   "n": 5275,
+   "hist": 12.0,
+   "live": 12.5,
+   "city_ratio": 1.039
+  },
+  "12:00": {
+   "n": 5164,
+   "hist": 12.1,
+   "live": 11.7,
+   "city_ratio": 1.055
+  },
+  "12:30": {
+   "n": 5224,
+   "hist": 13.5,
+   "live": 12.4,
+   "city_ratio": 1.013
+  },
+  "13:00": {
+   "n": 3685,
+   "hist": 13.4,
+   "live": 12.0,
+   "city_ratio": 1.066
+  },
+  "13:30": {
+   "n": 3524,
+   "hist": 12.9,
+   "live": 13.2,
+   "city_ratio": 1.067
+  },
+  "14:00": {
+   "n": 3279,
+   "hist": 13.7,
+   "live": 12.9,
+   "city_ratio": 1.068
+  },
+  "14:30": {
+   "n": 3607,
+   "hist": 13.5,
+   "live": 13.2,
+   "city_ratio": 1.079
+  },
+  "15:00": {
+   "n": 3340,
+   "hist": 13.2,
+   "live": 12.6,
+   "city_ratio": 1.088
+  },
+  "15:30": {
+   "n": 4065,
+   "hist": 13.5,
+   "live": 12.4,
+   "city_ratio": 1.073
+  },
+  "16:00": {
+   "n": 3878,
+   "hist": 12.0,
+   "live": 11.8,
+   "city_ratio": 1.085
+  },
+  "16:30": {
+   "n": 4058,
+   "hist": 12.2,
+   "live": 11.5,
+   "city_ratio": 1.076
+  },
+  "17:00": {
+   "n": 4275,
+   "hist": 12.7,
+   "live": 12.4,
+   "city_ratio": 1.078
+  },
+  "17:30": {
+   "n": 4195,
+   "hist": 13.9,
+   "live": 12.5,
+   "city_ratio": 1.049
+  },
+  "18:00": {
+   "n": 3788,
+   "hist": 14.9,
+   "live": 13.6,
+   "city_ratio": 1.089
+  },
+  "18:30": {
+   "n": 3679,
+   "hist": 14.5,
+   "live": 13.6,
+   "city_ratio": 1.082
+  },
+  "19:00": {
+   "n": 3763,
+   "hist": 13.6,
+   "live": 13.5,
+   "city_ratio": 1.07
+  },
+  "19:30": {
+   "n": 4077,
+   "hist": 13.7,
+   "live": 13.6,
+   "city_ratio": 1.078
+  },
+  "20:00": {
+   "n": 4453,
+   "hist": 13.7,
+   "live": 13.1,
+   "city_ratio": 1.031
+  },
+  "20:30": {
+   "n": 4174,
+   "hist": 12.0,
+   "live": 13.4,
+   "city_ratio": 1.073
+  },
+  "21:00": {
+   "n": 5547,
+   "hist": 12.2,
+   "live": 12.2,
+   "city_ratio": 0.998
+  }
+ },
+ "wait_next_bus": {
+  "n": 9171,
+  "actual_median_s": 774,
+  "historical_headway_half": {
+   "median_abs_err_s": 503,
+   "within_2min": 14.0
+  },
+  "live_eta": {
+   "median_abs_err_s": 107,
+   "within_2min": 52.7
+  }
+ },
+ "model_source": "observed_gps_segments (fallback: schedule x fitted hour factor)",
+ "runtime_s": 102
+}

@@ -1,0 +1,8 @@
+- 16:37 route_patterns.csv (GTFS, 2574 routes, 82k rows) written; GPS processor in test
+- 16:44 v1 (day 15 only) segment_times.csv, stop_headways.csv, route_patterns.csv ready in model/. 81.5% of GTFS segments covered, median seg speed 16.7 km/h. Full 1-24 Oct run in progress.
+- 17:08 days 01-10 processed; days 11-14,16-21 running (run 1) + days 22-31 launched in parallel (run 2, 10 workers, holdout days 25-31 first). Decision: keep v1 matcher (no UP/DOWN pair fix) for all days. ETA all days processed ~17:40, full tables + holdout_trips.csv ~17:50.
+- 17:10 v1.5 tables (11 days: 01-10,15) copied: 89.0% GTFS segment coverage, 2145/2574 routes, 15.5M segment obs.
+- 17:19 days 01-21 processed. Days 22-31 running (all 10 in parallel), ETA ~17:35; then holdout_trips.csv first, full 1-24 tables ~17:45.
+- 17:28 holdout_trips.csv (20k rides from 25-31 Oct) ready. Full 1-24 aggregation running.
+- 17:29 FULL model (train 01-24 Oct) copied: segment_times/stop_headways. 90.5% GTFS segment coverage, 2203/2574 routes, 33.4M segment obs. Holdout eval (sum of medians): median APE 13.8%, but long rides under-predicted; adding mean_s column next.
+- 17:31 DONE: final tables (train 01-24) + holdout_trips.csv + README_model.md. segment_times has extra mean_s column. Holdout median APE 13.2% (median_s).

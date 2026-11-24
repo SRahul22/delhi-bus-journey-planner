@@ -1,0 +1,81 @@
+--- a/planner/app.py
++++ b/planner/app.py
+@@ -16,6 +16,18 @@
+ planner = Planner()
+ STARTED = time.time()
+ 
++# Optional real-time layer (../realtime): live GPS ratios + next-bus ETAs, fed by a replay of 28 Oct 2026.
++# Used per request with ?realtime=1. Disable loading with REALTIME=0.
++RT = None
++if os.environ.get("REALTIME", "1") != "0":
++    try:
++        import sys
++        sys.path.insert(0, os.path.join(os.path.dirname(HERE), "realtime"))
++        from service import RealtimeService
++        RT = RealtimeService(planner)
++    except Exception as e:  # noqa: BLE001  (missing replay file etc. -> historical only)
++        print("realtime layer disabled:", repr(e))
++
+ # Delhi NCR bounding box (generous)
+ BBOX = (28.2, 29.0, 76.7, 77.6)
+ 
+@@ -34,7 +46,8 @@
+ @app.get("/journey")
+ def journey(from_lat: float, from_lng: float, to_lat: float, to_lng: float,
+             depart: Optional[str] = Query(None, description="ISO datetime, IST if no offset; default now"),
+-            max_options: int = Query(3, ge=1, le=6)):
++            max_options: int = Query(3, ge=1, le=6),
++            realtime: bool = Query(False, description="apply live GPS conditions (replay clock if depart omitted)")):
+     _check(from_lat, from_lng, "origin")
+     _check(to_lat, to_lng, "destination")
+     dep = None
+@@ -43,9 +56,39 @@
+             dep = datetime.fromisoformat(depart.replace("Z", "+00:00"))
+         except ValueError:
+             raise HTTPException(400, "depart must be an ISO datetime, e.g. 2025-11-25T09:00")
+-    return planner.plan(from_lat, from_lng, to_lat, to_lng, dep, max_options=max_options)
++    p = planner
++    if realtime and RT is not None:
++        dep = dep or RT.now_dt()
++        p = RT.planner_for(dep) or planner
++    res = p.plan(from_lat, from_lng, to_lat, to_lng, dep, max_options=max_options)
++    if realtime:
++        res["realtime"] = dict(applied=p is not planner, clock=RT.feed.now_iso() if RT else None,
++                               note=None if p is not planner else "historical only: realtime unavailable or depart not near the live clock")
++    return res
+ 
+ 
++@app.get("/realtime/status")
++def realtime_status():
++    return RT.status() if RT else dict(enabled=False)
++
++
++@app.post("/realtime/clock")
++def realtime_clock(start: str, speed: float = 1.0):
++    """Jump the replay clock, e.g. start=2026-10-28T18:00&speed=10."""
++    if RT is None:
++        raise HTTPException(404, "realtime layer not loaded")
++    RT.set_clock(start, speed)
++    return RT.status()
++
++
++@app.get("/realtime/eta")
++def realtime_eta(stop_id: str, route_id: str):
++    """Live next-bus ETAs (seconds from the live clock) for a route at a stop."""
++    if RT is None:
++        raise HTTPException(404, "realtime layer not loaded")
++    return dict(clock=RT.feed.now_iso(), etas_s=[e for e, _ in RT.live.next_bus_eta(stop_id, route_id)])
++
++
+ @app.get("/stops/search")
+ def stops_search(q: str = Query(..., min_length=2), limit: int = Query(15, ge=1, le=50)):
+     return dict(results=planner.search_stops(q, limit))
+@@ -55,6 +98,8 @@
+ def reload_model():
+     """Re-read model CSVs from the model dir (after the model agent writes new tables)."""
+     planner.reload_model()
++    if RT is not None:
++        RT.reload()
+     return dict(model=planner.model.source, stats=planner.model.stats)
+ 
+ 

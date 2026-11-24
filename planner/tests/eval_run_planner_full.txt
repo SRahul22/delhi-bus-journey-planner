@@ -1,0 +1,115 @@
+P01 899 85DOWN 178ms 
+P02 1425 525STLUP 200ms 
+P03 2032 717AUP 107ms 
+P04 985 717AUP 111ms 
+P05 964 578DOWN 92ms 
+P06 1826 525STLDOWN 102ms 
+P07 667 729UP 82ms 
+P08 853 AIRPORT-STLDOWN 79ms 
+P09 1068 525STLDOWN 26ms 
+P10 925 623DOWN 143ms 
+P11 1929 165UP 76ms 
+P12 825 8UP 46ms 
+P13 1011 359DOWN 94ms 
+P14 776 144DOWN 66ms 
+P15 1521 307DOWN 120ms 
+P16 2336 78DOWN 293ms 
+P17 1121 165ADOWN 80ms 
+P18 855 33UP 85ms 
+P19 1851 717ADOWN 55ms 
+P20 1879 525STLDOWN 85ms 
+P21 2428 502DOWN>D-028DOWN 80ms 
+P22 2817 717ADOWN 97ms 
+P23 2898 258DOWN 52ms 
+P24 1735 729DOWN 100ms 
+P25 2826 227ADOWN 72ms 
+P26 3220 258DOWN 50ms 
+P27 1301 724UP 103ms 
+P28 1162 729UP 131ms 
+P29 3610 990EXTUP>919DOWN 202ms 
+P30 1726 359DOWN 104ms 
+P31 2297 522UP 74ms 
+P32 2098 D-9101DOWN 109ms 
+P33 2447 966DOWN>623UP 167ms 
+P34 4365 901UP>GL-23UP>208DOWN 262ms 
+P35 1896 307DOWN 64ms 
+P36 1793 8UP 61ms 
+P37 5814 729DOWN 187ms 
+P38 5833 621DOWN>412UP>883UP 270ms 
+P39 4457 OMS(-)DOWN>567UP 220ms 
+P40 6438 569DOWN 247ms 
+P41 4034 D-2301UP>972EXUP 148ms 
+P42 4262 764UP>511ADOWN 210ms 
+P43 4498 724UP 228ms 
+P44 4742 502DOWN 185ms 
+P45 7497 623UP 288ms 
+P46 2533 MAHARAN PRATAP ISBT TO SONIPAT BUS STAND UP 127ms 
+P47 7325 944DOWN>236DOWN 269ms 
+P48 5072 764UP>511ADOWN 220ms 
+P49 4886 534DOWN>543ADOWN 209ms 
+P50 4861 211UP>211BSTL-HPDUP 317ms 
+P51 1807 448DOWN>413DOWN 112ms 
+P52 3008 D-004UP>VASANT VIHAR METRO STATION - ANDHERIA BAGH MORE / CHHATARPUR METRO STATION  UP 231ms 
+P53 5624 578DOWN>764DOWN>628STL-GHD-IDOWN 228ms 
+P54 2991 511AUP>D-036UP 130ms 
+P55 2969 764DOWN 119ms 
+P56 2597 534AUP>D-1103UP 132ms 
+P57 2773 D-054STLUP>448UP 187ms 
+P58 3938 473DOWN 178ms 
+P59 4710 D-1104UP>774DOWN 239ms 
+P60 6152 DS-16UP>703UP 307ms 
+
+results: 60/60 with options; implausible: 1
+door-to-door km/h (straight line): {'count': 60.0, 'mean': 11.6, 'std': 3.2, 'min': 6.7, '25%': 9.1, '50%': 11.4, '75%': 13.6, 'max': 22.3}
+ride / GTFS schedule on same legs: {'count': 60.0, 'mean': 1.13, 'std': 0.26, 'min': 0.44, '25%': 0.98, '50%': 1.13, '75%': 1.26, 'max': 1.82}
+by band:
+         door_kmh  ride_vs_sched  duration_s
+band                                       
+long        12.1           1.11      4861.0
+medium      10.6           1.18      2522.0
+short       11.7           1.10      1011.0
+by slot hour:
+         door_kmh  ride_vs_sched
+depart                         
+09:00       12.3          1.110
+13:00       11.8          1.070
+18:30        9.4          1.265
+   pair_id      kind  dist_km            depart  duration_s  ride_s  wait_s  walk_m  transfers                                                                                  routes                         ticket_routes  door_kmh  ride_vs_sched                                          flags
+0      P01    direct     2.40  2026-10-28T13:00         899     638     261       0          0                                                                                  85DOWN        85DOWN|990DOWN|894DOWN|208DOWN       9.6           1.24                                   slow_6-10kmh
+2      P03    direct     4.20  2026-10-28T09:00        2032    1735     297       0          0                                                                                  717AUP             717AUP|729UP|706AUP|706UP       7.4           1.35                                   slow_6-10kmh
+4      P05    direct     3.71  2026-10-28T13:00         964     664     300       0          0                                                                                 578DOWN     729DOWN|706DOWN|729BDOWN|706ADOWN      13.9           0.79                               not_ticket_route
+5      P06    direct     4.86  2026-10-28T18:30        1826    1444     121     312          0                                                                              525STLDOWN        525DOWN|717BDOWN|717DOWN|34AUP       9.6           1.56                  slow_6-10kmh|not_ticket_route
+6      P07    direct     1.64  2026-10-28T09:00         667     547     120       0          0                                                                                   729UP      729UP|717AUP|706UP|801-UTT-KAPUP       8.9           1.67                                   slow_6-10kmh
+9      P10    direct     3.22  2026-10-28T18:30         925     678     247       0          0                                                                                 623DOWN  943DOWN|D-006DOWN|D-018DOWN|418ADOWN      12.5           1.05                               not_ticket_route
+10     P11    direct     4.05  2026-10-28T18:30        1929    1371     559       0          0                                                                                   165UP                          165UP|106AUP       7.6           1.67                                   slow_6-10kmh
+12     P13    direct     4.19  2026-10-28T13:00        1011     749     262       0          0                                                                                 359DOWN                            85UP|740UP      14.9           0.81                               not_ticket_route
+15     P16    direct     4.67  2026-10-28T18:30        2336    2207     129       0          0                                                                                  78DOWN                                78DOWN       7.2           1.38                                   slow_6-10kmh
+16     P17    direct     3.28  2026-10-28T18:30        1121     747     333      49          0                                                                                165ADOWN                 221UP|939DOWN|946DOWN      10.5           0.87                               not_ticket_route
+17     P18    direct     3.87  2026-10-28T09:00         855     636     219       0          0                                                                                    33UP                               971DOWN      16.3           0.80                               not_ticket_route
+20     P21    direct     5.77  2026-10-28T09:00        2428    1851     479     117          1                                                                       502DOWN>D-028DOWN                 502DOWN|505DOWN|725UP       8.6           1.46                                   slow_6-10kmh
+21     P22    direct     6.23  2026-10-28T18:30        2817    2176     203     526          0                                                                                717ADOWN      534ADOWN|715UP|539ADOWN|715ADOWN       8.0           1.82                  slow_6-10kmh|not_ticket_route
+22     P23    direct     7.83  2026-10-28T13:00        2898    2234     450     257          0                                                                                 258DOWN                               258DOWN       9.7           1.22                                   slow_6-10kmh
+24     P25    direct     6.91  2026-10-28T13:00        2826    1577     595     785          0                                                                                227ADOWN                              227ADOWN       8.8           1.05                                   slow_6-10kmh
+27     P28    direct     7.19  2026-10-28T13:00        1162    1009     153       0          0                                                                                   729UP                    729UP|706UP|706AUP      22.3           0.68                                  fast_18-25kmh
+28     P29    direct    11.28  2026-10-28T13:00        3610    2949     632      34          1                                                                        990EXTUP>919DOWN                       D-2301UP|990CUP      11.2           1.07                               not_ticket_route
+29     P30    direct     6.21  2026-10-28T13:00        1726    1463     262       0          0                                                                                 359DOWN                                  85UP      13.0           1.07                               not_ticket_route
+30     P31    direct     6.09  2026-10-28T13:00        2297    1603     402     350          0                                                                                   522UP              450DOWN|440ADOWN|440DOWN       9.5           1.17                  slow_6-10kmh|not_ticket_route
+32     P33    direct     6.39  2026-10-28T18:30        2447    1877     570       0          1                                                                           966DOWN>623UP                  440AUP|440UP|522DOWN       9.4           1.27                  slow_6-10kmh|not_ticket_route
+33     P34    direct     9.81  2026-10-28T18:30        4365    3023    1061     337          2                                                                   901UP>GL-23UP>208DOWN                                 214UP       8.1           1.17                  slow_6-10kmh|not_ticket_route
+37     P38    direct    14.53  2026-10-28T18:30        5833    4564    1018     301          2                                                                     621DOWN>412UP>883UP                           502UP|505UP       9.0           1.29                  slow_6-10kmh|not_ticket_route
+38     P39    direct    20.61  2026-10-28T09:00        4457    3995     409      64          1                                                                        OMS(-)DOWN>567UP                          254AUP|254UP      16.6           0.80                               not_ticket_route
+40     P41    direct    16.76  2026-10-28T18:30        4034    3185     849       0          1                                                                        D-2301UP>972EXUP                                990CUP      15.0           0.90                               not_ticket_route
+41     P42    direct    17.62  2026-10-28T09:00        4262    3847     369      57          1                                                                          764UP>511ADOWN                                 774UP      14.9           0.92                               not_ticket_route
+45     P46    direct    15.05  2026-10-28T18:30        2533    1333    1200       0          0                                             MAHARAN PRATAP ISBT TO SONIPAT BUS STAND UP                                 144UP      21.4           0.44  fast_18-25kmh|RIDE<0.6xSCHED|not_ticket_route
+46     P47    direct    24.18  2026-10-28T09:00        7325    6296     681     418          1                                                                         944DOWN>236DOWN                               943DOWN      11.9           1.03                               not_ticket_route
+47     P48    direct    17.03  2026-10-28T18:30        5072    4518     460     113          1                                                                          764UP>511ADOWN                                 774UP      12.1           1.15                               not_ticket_route
+48     P49    direct    12.20  2026-10-28T18:30        4886    4302     584       0          1                                                                        534DOWN>543ADOWN                               534DOWN       9.0           1.42                                   slow_6-10kmh
+49     P50    direct    12.67  2026-10-28T18:30        4861    3834     682     414          1                                                                     211UP>211BSTL-HPDUP                                 211UP       9.4           1.26                                   slow_6-10kmh
+50     P51  transfer     4.60  2026-10-28T09:00        1807    1233     574       0          1                                                                         448DOWN>413DOWN                         534UP>413DOWN       9.2           1.10                                   slow_6-10kmh
+51     P52  transfer     5.59  2026-10-28T18:30        3008    2255     754       0          1  D-004UP>VASANT VIHAR METRO STATION - ANDHERIA BAGH MORE / CHHATARPUR METRO STATION  UP                        578UP>534ADOWN       6.7           1.37                  slow_6-10kmh|not_ticket_route
+52     P53  transfer    10.91  2026-10-28T18:30        5624    3911     925     945          2                                                        578DOWN>764DOWN>628STL-GHD-IDOWN                         729UP>718DOWN       7.0           1.22                  slow_6-10kmh|not_ticket_route
+53     P54  transfer     6.80  2026-10-28T09:00        2991    1942     590     552          1                                                                          511AUP>D-036UP                           463UP>469UP       8.2           1.19                  slow_6-10kmh|not_ticket_route
+54     P55  transfer     9.49  2026-10-28T18:30        2969    2626     258     102          0                                                                                 764DOWN                         578UP>715DOWN      11.5           1.21                               not_ticket_route
+56     P57  transfer     5.30  2026-10-28T13:00        2773    1542     941     348          1                                                                        D-054STLUP>448UP                         502UP>534DOWN       6.9           1.21                  slow_6-10kmh|not_ticket_route
+58     P59  transfer    15.03  2026-10-28T09:00        4710    3655     653     483          1                                                                        D-1104UP>774DOWN                      717ADOWN>433DOWN      11.5           0.97                               not_ticket_route
+59     P60  transfer    15.27  2026-10-28T18:30        6152    4163    1290     839          1                                                                           DS-16UP>703UP                         729UP>718DOWN       8.9           1.37                  slow_6-10kmh|not_ticket_route

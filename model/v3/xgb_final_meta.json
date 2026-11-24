@@ -1,0 +1,183 @@
+{
+ "features": [
+  "log_base_med",
+  "skew",
+  "n_stops",
+  "log_dist",
+  "base_speed",
+  "hour_f",
+  "weekend",
+  "route_len_m",
+  "route_nstops",
+  "route_speed",
+  "log_route_obs",
+  "route_cov",
+  "route_skew",
+  "board_pos",
+  "b_lat",
+  "b_lon",
+  "a_lat",
+  "a_lon",
+  "fb_frac",
+  "mean_logn"
+ ],
+ "target": "log(actual_s / sum_of_segment_medians)",
+ "clip": [
+  0.5,
+  2.5
+ ],
+ "params": {
+  "objective": "reg:absoluteerror",
+  "device": "cuda",
+  "tree_method": "hist",
+  "eval_metric": "mae",
+  "subsample": 0.8,
+  "colsample_bytree": 0.8,
+  "reg_lambda": 10.0,
+  "learning_rate": 0.03,
+  "max_depth": 10,
+  "min_child_weight": 50
+ },
+ "rounds": 100,
+ "split": {
+  "train": "days 1-18 (folds 1-3, out-of-fold)",
+  "validation": "days 19-24 (fold 4)",
+  "final_fit": "days 1-24",
+  "test": "days 25-31"
+ },
+ "results": {
+  "test_xgb_final": {
+   "median_ape": 12.28,
+   "mean_ape": 17.94,
+   "within20": 69.0,
+   "bias_s": -73.0,
+   "n": 600000
+  },
+  "test_sum_median": {
+   "median_ape": 12.69,
+   "mean_ape": 18.48,
+   "within20": 67.8,
+   "bias_s": -120.0,
+   "n": 600000
+  },
+  "validation_chosen": {
+   "median_ape": 13.76,
+   "mean_ape": 20.14,
+   "within20": 64.6,
+   "bias_s": -17.0,
+   "n": 300000
+  }
+ },
+ "by_length": {
+  "<10 min": {
+   "xgb": {
+    "median_ape": 13.39,
+    "mean_ape": 19.68,
+    "within20": 65.8,
+    "bias_s": 1.0,
+    "n": 302145
+   },
+   "sum_median": {
+    "median_ape": 13.18,
+    "mean_ape": 19.72,
+    "within20": 66.2,
+    "bias_s": -5.0,
+    "n": 302145
+   }
+  },
+  "10-30 min": {
+   "xgb": {
+    "median_ape": 11.02,
+    "mean_ape": 15.81,
+    "within20": 73.2,
+    "bias_s": -48.0,
+    "n": 195063
+   },
+   "sum_median": {
+    "median_ape": 11.36,
+    "mean_ape": 16.3,
+    "within20": 72.0,
+    "bias_s": -94.0,
+    "n": 195063
+   }
+  },
+  "30-60 min": {
+   "xgb": {
+    "median_ape": 11.23,
+    "mean_ape": 16.03,
+    "within20": 72.3,
+    "bias_s": -198.0,
+    "n": 79283
+   },
+   "sum_median": {
+    "median_ape": 12.97,
+    "mean_ape": 17.77,
+    "within20": 67.3,
+    "bias_s": -333.0,
+    "n": 79283
+   }
+  },
+  ">60 min": {
+   "xgb": {
+    "median_ape": 13.99,
+    "mean_ape": 19.66,
+    "within20": 63.5,
+    "bias_s": -804.0,
+    "n": 23509
+   },
+   "sum_median": {
+    "median_ape": 18.33,
+    "mean_ape": 23.04,
+    "within20": 53.7,
+    "bias_s": -1087.0,
+    "n": 23509
+   }
+  }
+ },
+ "by_hour": {
+  "8": {
+   "xgb": 9.93,
+   "sum_median": 10.28
+  },
+  "9": {
+   "xgb": 10.52,
+   "sum_median": 10.98
+  },
+  "13": {
+   "xgb": 14.08,
+   "sum_median": 14.28
+  },
+  "18": {
+   "xgb": 16.13,
+   "sum_median": 17.09
+  },
+  "19": {
+   "xgb": 15.95,
+   "sum_median": 16.28
+  }
+ },
+ "importance_gain_pct": {
+  "n_stops": 15.8,
+  "skew": 14.7,
+  "fb_frac": 13.7,
+  "hour_f": 7.1,
+  "weekend": 6.0,
+  "route_speed": 4.0,
+  "base_speed": 3.9,
+  "mean_logn": 3.5,
+  "log_base_med": 3.2,
+  "a_lon": 2.9,
+  "route_nstops": 2.8,
+  "b_lon": 2.8,
+  "route_cov": 2.6,
+  "b_lat": 2.6,
+  "log_route_obs": 2.6,
+  "route_skew": 2.6,
+  "a_lat": 2.6,
+  "log_dist": 2.5,
+  "route_len_m": 2.3,
+  "board_pos": 2.1
+ },
+ "xgboost": "2.1.4",
+ "train_seconds": 84
+}

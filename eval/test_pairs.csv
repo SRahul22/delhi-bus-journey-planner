@@ -1,0 +1,61 @@
+pair_id,kind,band,region,from_name,from_stop_id,from_lat,from_lng,to_name,to_stop_id,to_lat,to_lng,dist_km,depart,slot,peak_hour,tickets,routes,via,gtfs_sched_ride_s,match
+P01,direct,short,Central,West Patel Nagar,1873,28.647849,77.164766,Karol Bagh Metro Station,2270,28.644200,77.189000,2.400000,2026-10-28T13:00,offpeak,10,4381,85DOWN|990DOWN|894DOWN|208DOWN,,513.000000,route_part/route_exact
+P02,direct,short,South,Hamdard Nagar / Sangam Vihar,2300,28.511924,77.249214,Saket Metro Sation / Said-Ul-Ajaib,2775,28.520404,77.202805,4.630000,2026-10-28T09:00,am_peak,9,2517,525STLUP|440UP|717AUP|411UP,,930.000000,route_exact/route_norm
+P03,direct,short,West,Rang Puri (Nh8),2531,28.541890,77.118172,Kapashera Border,3253,28.521428,77.082028,4.200000,2026-10-28T09:00,am_peak,8,2142,717AUP|729UP|706AUP|706UP,,1281.000000,route_norm/route_exact
+P04,direct,short,South,Khanpur Extension / Devli Road Xing / Dakshin Puri G-Block,2898,28.513714,77.234915,Saket Metro Sation / Said-Ul-Ajaib,2775,28.520404,77.202805,3.220000,2026-10-28T13:00,offpeak,9,1943,525STLUP|440UP|717AUP|411UP,,646.000000,route_norm/route_norm
+P05,direct,short,West,Samalkha Village,3207,28.534581,77.090406,Mahipal Pur (Nh8),8027,28.547989,77.125228,3.710000,2026-10-28T13:00,offpeak,8,1626,729DOWN|706DOWN|729BDOWN|706ADOWN,,834.000000,route_exact/route_part
+P06,direct,short,South,Said Ul Zeb Village,5920,28.521336,77.200058,Hamdard Nagar / Sangam Vihar,2301,28.512060,77.248708,4.860000,2026-10-28T18:30,pm_peak,19,1593,525DOWN|717BDOWN|717DOWN|34AUP,,976.000000,route_norm/route_exact
+P07,direct,short,West,Samalkha Village,3209,28.534232,77.090282,Kapashera Border,7546,28.521345,77.082131,1.640000,2026-10-28T09:00,am_peak,8,1563,729UP|717AUP|706UP|801-UTT-KAPUP,,327.000000,route_exact/route_exact
+P08,direct,short,West,Palam Airport / Igi Airport T1,3530,28.569422,77.123579,Igi Airport Terminal 3,8317,28.555230,77.091282,3.530000,2026-10-28T13:00,offpeak,9,1514,AIRPORT-STLDOWN,,1079.000000,route_norm/route_norm
+P09,direct,short,South,Tughlaqabad Village,2463,28.509283,77.265000,Badarpur Border (T),2640,28.493130,77.303727,4.190000,2026-10-28T09:00,am_peak,8,1462,525STLDOWN|717DOWN|717ADOWN|525DOWN,,895.000000,route_exact/route_exact
+P10,direct,short,Central,Ito,1037,28.628142,77.245043,Laxmi Nagar Metro Station,7889,28.630868,77.277892,3.220000,2026-10-28T18:30,pm_peak,17,1026,943DOWN|D-006DOWN|D-018DOWN|418ADOWN,,648.000000,route_part/route_part
+P11,direct,short,North,Badli Railway Staion,1541,28.745197,77.137290,Shahbad Dairy,7620,28.746565,77.095788,4.050000,2026-10-28T18:30,pm_peak,19,735,165UP|106AUP,,819.000000,route_part/route_exact
+P12,direct,short,East,Kalindi Kunj Border,7072,28.543407,77.310452,Noida Sector 37,5742,28.562170,77.337830,3.390000,2026-10-28T09:00,am_peak,9,690,8UP|34UP,,,exact/route_exact
+P13,direct,short,Central,Mother Dairy,4277,28.619100,77.286250,Ito-Agcr,2197,28.627921,77.244465,4.190000,2026-10-28T13:00,offpeak,9,575,85UP|740UP,,929.000000,route_exact/route_part
+P14,direct,short,North,Alipur Gt Road,7593,28.750102,77.150691,Jahangir Puri Metro Station,7594,28.725902,77.162809,2.940000,2026-10-28T13:00,offpeak,8,543,144DOWN|125DOWN|146DOWN,,592.000000,route_fuzzy/route_fuzzy
+P15,direct,short,Central,Laxmi Nagar Xing,8820,28.629233,77.277304,Zakir Hussain College,1557,28.641133,77.229676,4.830000,2026-10-28T13:00,offpeak,9,528,307DOWN|309DOWN,,1127.000000,route_part/route_fuzzy
+P16,direct,short,North,Zakhira,595,28.668000,77.164283,Azad Pur Metro Station,97,28.707497,77.180549,4.670000,2026-10-28T18:30,pm_peak,18,492,78DOWN,,1604.000000,route_exact/route_part
+P17,direct,short,East,Dilshad Garden Gt Road,905,28.676150,77.311883,Anand Vihar Isbt Main Road,9103,28.647077,77.317582,3.280000,2026-10-28T18:30,pm_peak,8,460,221UP|939DOWN|946DOWN,,1100.000000,route_norm/route_norm
+P18,direct,short,East,Old Seemapuri,1822,28.680765,77.327745,Anand Vihar Isbt Main Road,7699,28.647011,77.317959,3.870000,2026-10-28T09:00,am_peak,8,396,971DOWN,,803.000000,route_exact/route_norm
+P19,direct,medium,South,Mahipal Pur Village,2490,28.541725,77.129447,Andheria Bagh More,2504,28.509433,77.178750,6.010000,2026-10-28T09:00,am_peak,8,1580,717BDOWN|717ADOWN|717DOWN|539DOWN,,1247.000000,route_exact/route_exact
+P20,direct,medium,South,Khanpur Extension / Devali Road Xing,2873,28.513860,77.234645,Badarpur Border (T),2640,28.493130,77.303727,7.130000,2026-10-28T09:00,am_peak,8,1483,525STLDOWN|717ADOWN|717BDOWN|717DOWN,,1502.000000,route_exact/route_exact
+P21,direct,medium,South,Mehrauli Terminal,7908,28.521316,77.183047,S.J. Hospital,2425,28.569671,77.204431,5.770000,2026-10-28T09:00,am_peak,7,1144,502DOWN|505DOWN|725UP,,,route_exact/part
+P22,direct,medium,South,Mahipal Pur,2489,28.545123,77.127987,Andheria More,9323,28.508091,77.175853,6.230000,2026-10-28T18:30,pm_peak,8,843,534ADOWN|715UP|539ADOWN|715ADOWN,,1269.000000,route_partial/route_part
+P23,direct,medium,North,Pusta No 5 Sonia Vihar,2045,28.734583,77.246633,Mori Gate Terminal,820,28.666517,77.225883,7.830000,2026-10-28T13:00,offpeak,10,769,258DOWN,,1906.000000,route_exact/route_exact
+P24,direct,medium,West,Mahipal Pur (Nh8),8027,28.547989,77.125228,Officer Enclave S.P Marg / Sardar Patel Marg,1738,28.597180,77.171499,7.090000,2026-10-28T13:00,offpeak,8,721,729DOWN|706DOWN,,1484.000000,route_part/route_norm
+P25,direct,medium,North,Crpf Camp,7256,28.716790,77.257940,Old Delhi Railway Station,7596,28.660309,77.228301,6.910000,2026-10-28T13:00,offpeak,8,673,227ADOWN,,1762.000000,route_norm/route_exact
+P26,direct,medium,North,Chauhan Patti (Terminal),2049,28.754235,77.243242,Mori Gate Terminal,820,28.666517,77.225883,9.900000,2026-10-28T09:00,am_peak,9,631,258DOWN,,2354.000000,route_exact/route_exact
+P27,direct,medium,West,Janak Setu,3088,28.610583,77.113871,Dhaula Kuan,3102,28.592987,77.162867,5.170000,2026-10-28T09:00,am_peak,9,625,588LSTLDOWN|724UP|588DOWN|711UP,,,exact/exact
+P28,direct,medium,West,Dhaula Kuan,3650,28.592905,77.163399,Rang Puri (Nh8),2531,28.541890,77.118172,7.190000,2026-10-28T13:00,offpeak,20,540,729UP|706UP|706AUP,,1484.000000,route_exact/route_norm
+P29,direct,medium,North,Rithala Metro Station,83,28.720008,77.107904,Bawana,671,28.806830,77.048016,11.280000,2026-10-28T13:00,offpeak,19,510,D-2301UP|990CUP,,2525.000000,route_exact/route_partial
+P30,direct,medium,Central,Mother Dairy,4277,28.619100,77.286250,Statsman House,1461,28.630300,77.223900,6.210000,2026-10-28T13:00,offpeak,9,497,85UP,,1372.000000,route_exact/route_fuzzy
+P31,direct,medium,Central,Defence Colony,2570,28.574267,77.228733,Scindia House,344,28.628700,77.221900,6.090000,2026-10-28T13:00,offpeak,8,460,450DOWN|440ADOWN|440DOWN,,1262.000000,route_exact/route_exact
+P32,direct,medium,West,Aerocity,3664,28.549694,77.117843,Palam Health Center,3690,28.591868,77.081259,5.900000,2026-10-28T18:30,pm_peak,18,452,D-9101DOWN,,,route_partial/fuzzy
+P33,direct,medium,Central,Kailash Bhawan / Scindia House,368,28.629210,77.221797,Defence Colony (Homyopathic College),2553,28.571983,77.227667,6.390000,2026-10-28T18:30,pm_peak,19,325,440AUP|440UP|522DOWN,,1477.000000,route_exact/route_exact
+P34,direct,medium,East,Shashtri Park,378,28.649272,77.239311,New Seema Puri,1808,28.684671,77.331423,9.810000,2026-10-28T18:30,pm_peak,20,212,214UP,,2723.000000,route_fuzzy/route_exact
+P35,direct,medium,East,Trilok Puri 13-Block,7673,28.612693,77.305417,Delhi Gate,818,28.639661,77.243789,6.720000,2026-10-28T09:00,am_peak,9,208,307DOWN|309DOWN,,1567.000000,route_norm/route_part
+P36,direct,medium,East,Sarita Vihar Xing,5941,28.536880,77.287582,Noida Sector 37,5742,28.562170,77.337830,5.660000,2026-10-28T18:30,pm_peak,17,189,8UP,,1176.000000,route_exact/route_exact
+P37,direct,long,West,Kapashera Crossing,3206,28.531234,77.088154,Mori Gate Terminal,872,28.665824,77.222057,19.870000,2026-10-28T09:00,am_peak,8,382,729DOWN|706DOWN,,5138.000000,route_exact/route_exact
+P38,direct,long,Central,S.J. Hospital,2425,28.569671,77.204431,Tb Hospital,332,28.700364,77.205091,14.530000,2026-10-28T18:30,pm_peak,21,337,502UP|505UP,,,part/norm
+P39,direct,long,North,Bhajanpura,1530,28.703334,77.263968,Qamruddin Nagar Terminal,168,28.682061,77.054037,20.610000,2026-10-28T09:00,am_peak,8,302,254AUP|254UP,,4941.000000,route_exact/route_exact
+P40,direct,long,West,Sultan Puri (T),8060,28.702840,77.075176,Safdarjung Terminal,6081,28.579739,77.212807,19.180000,2026-10-28T09:00,am_peak,7,298,569DOWN,,5246.000000,route_exact/route_fuzzy
+P41,direct,long,West,Rithala Metro Station,83,28.720008,77.107904,Auchandi Border,1551,28.828817,76.988907,16.760000,2026-10-28T18:30,pm_peak,17,271,990CUP,,3577.000000,route_exact/route_exact
+P42,direct,long,South,Prehlad Pur,3687,28.579465,77.101643,Crpf Camp / Crown Plaza,2635,28.527783,77.272200,17.620000,2026-10-28T09:00,am_peak,9,222,774UP,,,route_partial/route_norm
+P43,direct,long,South,Sagar Pur - Vashishth Park,3624,28.609265,77.100931,Nehru Place Terminal,2560,28.548700,77.256981,16.660000,2026-10-28T09:00,am_peak,8,210,724UP,,3674.000000,route_fuzzy/route_exact
+P44,direct,long,Central,Mehrauli Terminal,7908,28.521316,77.183047,Kashmere Gate City (T),1025,28.668198,77.229219,16.940000,2026-10-28T09:00,am_peak,8,202,502DOWN,,3676.000000,route_exact/route_fuzzy
+P45,direct,long,Central,Shahdara Terminal,7829,28.674250,77.287093,Nangal Dewat,6429,28.527922,77.140545,21.670000,2026-10-28T09:00,am_peak,7,182,623UP,,6423.000000,route_exact/route_exact
+P46,direct,long,North,Jahangir Puri Metro Station,7598,28.725519,77.162798,Singhu Border,1010,28.856700,77.124572,15.050000,2026-10-28T18:30,pm_peak,19,177,144UP,,3023.000000,route_fuzzy/route_partial
+P47,direct,long,North,Sultan Puri (T),8060,28.702840,77.075176,Isbt Anand Vihar Terminal,8256,28.646953,77.314668,24.180000,2026-10-28T09:00,am_peak,8,172,943DOWN,,6014.000000,route_exact/route_fuzzy
+P48,direct,long,South,Prehlad Pur,3687,28.579465,77.101643,Clal Chowk,2825,28.534500,77.268300,17.030000,2026-10-28T18:30,pm_peak,19,143,774UP,,,route_partial/route_norm
+P49,direct,long,East,Nehru Place Terminal,2560,28.548700,77.256981,Isbt Anand Vihar,4947,28.644974,77.316964,12.200000,2026-10-28T18:30,pm_peak,19,117,534DOWN,,3335.000000,route_exact/route_norm
+P50,direct,long,East,Mori Gate Terminal,882,28.666080,77.221610,Mayur Vihar Ph Iii Paper Market,8719,28.616891,77.338703,12.670000,2026-10-28T18:30,pm_peak,17,78,211UP,,3600.000000,route_exact/route_part
+P51,transfer,short,South,Saket A-Block,2906,28.527800,77.205200,Andrews Ganj,2360,28.565478,77.224607,4.600000,2026-10-28T09:00,am_peak,9,351,534UP>413DOWN,Mehrauli Terminal,1956.000000,route
+P52,transfer,medium,South,Vasant Vihar Depot,3020,28.558293,77.172181,Andheria More,9323,28.508091,77.175853,5.590000,2026-10-28T18:30,pm_peak,10,390,578UP>534ADOWN,Mahipal Pur,2811.000000,route
+P53,transfer,medium,West,Shiv Murti,2532,28.535938,77.112994,Uttam Nagar Terminal,6233,28.625343,77.066856,10.910000,2026-10-28T18:30,pm_peak,18,378,729UP>718DOWN,Kapashera Border,,route
+P54,transfer,medium,South,Punj Sons,2291,28.545217,77.264100,Said Ul Zeb Village,5920,28.521336,77.200058,6.800000,2026-10-28T09:00,am_peak,8,369,463UP>469UP,Hamdard Nagar,,route
+P55,transfer,medium,West,Vasant Vihar Depot,3020,28.558293,77.172181,Manglapuri,8546,28.590808,77.082342,9.490000,2026-10-28T18:30,pm_peak,20,296,578UP>715DOWN,Mahipal Pur,3194.000000,route
+P56,transfer,medium,South,Desu Office,6305,28.509359,77.172409,Igi Airport Terminal-2,3658,28.558893,77.086255,10.060000,2026-10-28T09:00,am_peak,9,294,534AUP>D-1103UP,Mahipal Pur,2034.000000,route
+P57,transfer,medium,South,Kidwai Nagar,2398,28.575495,77.209919,Saket A-Block,2957,28.528000,77.205000,5.300000,2026-10-28T13:00,offpeak,9,282,502UP>534DOWN,Mehrauli Terminal,1900.000000,route
+P58,transfer,long,East,Madanpur Xing,2667,28.529321,77.288346,Anand Vihar (Isbt),9428,28.658718,77.310524,14.550000,2026-10-28T09:00,am_peak,6,534,405UP>473DOWN,Badarpur Border,5593.000000,route
+P59,transfer,long,South,Mahipal Pur Village,2490,28.541725,77.129447,Esi Hospital Okhla,7974,28.515866,77.280458,15.030000,2026-10-28T09:00,am_peak,8,504,717ADOWN>433DOWN,Badarpur Border (T),4880.000000,route
+P60,transfer,long,West,Super Bazar,367,28.632651,77.223088,Uttam Nagar Terminal,6233,28.625343,77.066856,15.270000,2026-10-28T18:30,pm_peak,18,277,729UP>718DOWN,Kapashera Border,,route

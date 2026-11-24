@@ -1,0 +1,146 @@
+train rides 1200000 (days [np.int8(1), np.int8(2), np.int8(3), np.int8(4), np.int8(5), np.int8(6), np.int8(7), np.int8(8), np.int8(9), np.int8(10), np.int8(11), np.int8(12), np.int8(13), np.int8(14), np.int8(15), np.int8(16), np.int8(17), np.int8(18), np.int8(19), np.int8(20), np.int8(21), np.int8(22), np.int8(23), np.int8(24)]), test rides 600000 (days [np.int8(25), np.int8(26), np.int8(27), np.int8(28), np.int8(29), np.int8(30), np.int8(31)])
+linear calib coef {'coef': [1.0147261146662656, 0.16147246983424046, -0.05887208763409357], 'intercept': -0.06895578396134727, 'features': ['log_base_med', 'log_mean_over_med', 'fb_frac']}
+lgbm_l1_all: 387 trees, CV mean|log err| 0.1913, 120s
+lgbm_l2_all: 23 trees, CV mean|log err| 0.1941, 126s
+lgbm_l1_no_latlon: 592 trees, CV mean|log err| 0.1909, 187s
+lgbm_l2_no_latlon: 33 trees, CV mean|log err| 0.1940, 194s
+lgbm_l1_small: 413 trees, CV mean|log err| 0.1910, 236s
+lgbm_l2_small: 26 trees, CV mean|log err| 0.1941, 241s
+CV mean|log err| of sum_median (zero correction): 0.1960
+
+== overall (test rides, days 25-31)
+                          n  medAPE   MAPE  within20  bias_s  med_err_s  MAE_s
+sum_median         600000.0   12.69  18.48      67.8  -120.0      -19.0  185.0
+sum_mean           600000.0   13.58  20.89      64.9   -34.0        8.0  176.0
+blend_med_mean     600000.0   12.45  18.33      68.3   -74.0      -11.0  175.0
+calib_bucket       600000.0   12.43  18.42      68.4   -76.0       -5.0  175.0
+calib_linear_log   600000.0   12.46  18.42      68.4   -75.0       -5.0  174.0
+lgbm_l1_all        600000.0   12.30  17.89      69.0   -72.0       -4.0  170.0
+lgbm_l2_all        600000.0   12.86  18.81      67.4   -58.0        4.0  172.0
+lgbm_l1_no_latlon  600000.0   12.32  17.91      68.9   -71.0       -4.0  170.0
+lgbm_l2_no_latlon  600000.0   12.87  18.75      67.4   -58.0        4.0  171.0
+lgbm_l1_small      600000.0   12.31  17.91      68.9   -72.0       -4.0  171.0
+lgbm_l2_small      600000.0   12.87  18.78      67.4   -58.0        4.0  172.0
+
+== actual <10 min (n=302145)
+                   medAPE   MAPE  within20  bias_s
+sum_median          13.18  19.72      66.2    -5.0
+sum_mean            15.71  25.02      59.2    20.0
+blend_med_mean      13.19  19.73      66.2    -5.0
+calib_bucket        13.47  20.23      65.4     1.0
+calib_linear_log    13.60  20.34      65.1     2.0
+lgbm_l1_all         13.39  19.60      65.8     1.0
+lgbm_l2_all         14.55  21.35      62.8    11.0
+lgbm_l1_no_latlon   13.43  19.62      65.7     1.0
+lgbm_l2_no_latlon   14.57  21.27      62.7    11.0
+lgbm_l1_small       13.39  19.57      65.8     1.0
+lgbm_l2_small       14.56  21.31      62.7    11.0
+
+== actual 10-30 min (n=195063)
+                   medAPE   MAPE  within20  bias_s
+sum_median          11.36  16.30      72.0   -94.0
+sum_mean            11.81  16.71      70.9    -2.0
+blend_med_mean      11.51  16.63      71.3   -68.0
+calib_bucket        11.18  16.18      72.7   -50.0
+calib_linear_log    11.15  16.06      72.9   -48.0
+lgbm_l1_all         11.05  15.81      73.2   -47.0
+lgbm_l2_all         11.25  15.94      73.0   -28.0
+lgbm_l1_no_latlon   11.06  15.83      73.2   -46.0
+lgbm_l2_no_latlon   11.26  15.91      73.1   -27.0
+lgbm_l1_small       11.05  15.86      73.1   -47.0
+lgbm_l2_small       11.25  15.93      73.0   -28.0
+
+== actual 30-60 min (n=79283)
+                   medAPE   MAPE  within20  bias_s
+sum_median          12.97  17.77      67.3  -333.0
+sum_mean            11.40  16.04      72.2  -126.0
+blend_med_mean      11.99  16.98      70.1  -163.0
+calib_bucket        11.50  16.55      71.1  -206.0
+calib_linear_log    11.41  16.40      71.4  -207.0
+lgbm_l1_all         11.24  15.98      72.4  -194.0
+lgbm_l2_all         11.16  15.95      72.7  -180.0
+lgbm_l1_no_latlon   11.29  16.05      72.2  -193.0
+lgbm_l2_no_latlon   11.15  15.89      72.8  -177.0
+lgbm_l1_small       11.33  16.12      72.1  -194.0
+lgbm_l2_small       11.16  15.93      72.7  -179.0
+
+== actual >60 min (n=23509)
+                   medAPE   MAPE  within20  bias_s
+sum_median          18.33  23.04      53.7 -1087.0
+sum_mean            13.36  18.89      65.2  -691.0
+blend_med_mean      13.36  19.05      65.2  -699.0
+calib_bucket        14.59  20.23      62.0  -845.0
+calib_linear_log    14.52  20.11      62.3  -830.0
+lgbm_l1_all         13.86  19.58      63.7  -794.0
+lgbm_l2_all         13.95  19.61      63.6  -796.0
+lgbm_l1_no_latlon   13.94  19.62      63.6  -797.0
+lgbm_l2_no_latlon   13.92  19.53      63.7  -788.0
+lgbm_l1_small       13.99  19.67      63.3  -799.0
+lgbm_l2_small       13.97  19.58      63.6  -793.0
+
+== medAPE by hour band
+                   00-07  07-11 AM peak  11-16  16-21 PM peak  21-24
+sum_median          8.73          10.62  13.98          15.59  12.69
+sum_mean            9.95          11.11  15.04          16.10  14.52
+blend_med_mean      8.69          10.42  13.75          15.06  12.69
+calib_bucket        8.87          10.48  13.69          14.92  12.68
+calib_linear_log    8.82          10.45  13.73          15.00  12.70
+lgbm_l1_all         8.55          10.30  13.71          14.85  12.29
+lgbm_l2_all         9.38          10.81  14.21          15.20  13.13
+lgbm_l1_no_latlon   8.55          10.33  13.73          14.87  12.29
+lgbm_l2_no_latlon   9.32          10.79  14.29          15.26  13.05
+lgbm_l1_small       8.56          10.33  13.75          14.86  12.29
+lgbm_l2_small       9.38          10.80  14.24          15.24  13.10
+
+== within20 by hour band
+                   00-07  07-11 AM peak  11-16  16-21 PM peak  21-24
+sum_median          79.9           75.7   64.1           60.1   67.6
+sum_mean            75.3           73.4   61.1           58.5   62.5
+blend_med_mean      79.9           76.1   64.8           61.1   67.6
+calib_bucket        79.4           76.0   65.0           61.5   67.6
+calib_linear_log    79.5           76.0   64.9           61.3   67.6
+lgbm_l1_all         81.4           76.6   65.2           61.8   68.8
+lgbm_l2_all         78.3           74.9   63.7           60.9   66.6
+lgbm_l1_no_latlon   81.3           76.5   65.1           61.8   68.9
+lgbm_l2_no_latlon   78.6           75.0   63.5           60.9   66.9
+lgbm_l1_small       81.3           76.4   65.1           61.8   68.8
+lgbm_l2_small       78.4           74.9   63.7           60.9   66.7
+
+== weekday (n=437062) medAPE: sum_median=12.46, sum_mean=13.53, blend_med_mean=12.27, calib_bucket=12.27, calib_linear_log=12.31, lgbm_l1_all=12.16, lgbm_l2_all=12.79, lgbm_l1_no_latlon=12.19, lgbm_l2_no_latlon=12.81, lgbm_l1_small=12.18, lgbm_l2_small=12.8
+
+== weekend (n=162938) medAPE: sum_median=13.32, sum_mean=13.7, blend_med_mean=12.94, calib_bucket=12.89, calib_linear_log=12.9, lgbm_l1_all=12.66, lgbm_l2_all=13.07, lgbm_l1_no_latlon=12.67, lgbm_l2_no_latlon=13.05, lgbm_l1_small=12.67, lgbm_l2_small=13.06
+
+== fb_frac>0.5 (n=18563) medAPE: sum_median=22.7, sum_mean=23.81, blend_med_mean=22.79, calib_bucket=23.06, calib_linear_log=22.8, lgbm_l1_all=17.88, lgbm_l2_all=21.35, lgbm_l1_no_latlon=18.17, lgbm_l2_no_latlon=20.57, lgbm_l1_small=18.47, lgbm_l2_small=21.1
+
+== one ride per trip (n=396774)
+                   medAPE   MAPE  within20  bias_s
+sum_median          12.74  18.56      67.6  -119.0
+sum_mean            13.62  21.01      64.8   -34.0
+blend_med_mean      12.51  18.42      68.2   -73.0
+calib_bucket        12.49  18.51      68.2   -76.0
+calib_linear_log    12.52  18.50      68.2   -74.0
+lgbm_l1_all         12.34  17.98      68.8   -71.0
+lgbm_l2_all         12.91  18.89      67.2   -58.0
+lgbm_l1_no_latlon   12.37  18.00      68.8   -71.0
+lgbm_l2_no_latlon   12.92  18.83      67.2   -57.0
+lgbm_l1_small       12.37  18.00      68.7   -72.0
+lgbm_l2_small       12.91  18.87      67.2   -58.0
+
+== feature importance (lgbm_l1_no_latlon)
+      feature  gain_pct  splits
+       hour_f      17.8    2521
+         skew      17.1     806
+      n_stops       9.2     673
+      fb_frac       8.5     756
+  route_speed       8.0    2082
+   base_speed       7.1    1409
+    mean_logn       6.2    1340
+log_route_obs       5.4    1684
+   route_skew       4.9    1620
+ log_base_med       3.7     944
+  route_len_m       2.6     947
+ route_nstops       2.5     818
+    route_cov       1.9     605
+      weekend       1.8     260
+     log_dist       1.8     625
+    board_pos       1.5     670

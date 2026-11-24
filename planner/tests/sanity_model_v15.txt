@@ -1,0 +1,66 @@
+TravelTimeModel: observed_gps_segments (fallback: schedule x fitted hour factor); {'segments_with_any_observation': 77164, 'segment_cells': {'route_exact': 1213279, 'stop_pair': 1681748, 'schedule_x_segment_ratio': 808845, 'schedu
+== KashmereGate->CP 2026-11-25T09:00 275ms crow=4184m
+  recommended,fastest,fewest_transfers: 42min (p85 53) walk=629m wait=3m tr=0 | 729 ISBT Kashmere Gate (Lo->Regal / Palika Kendra 14st 30m 13.7kmh
+  alternative: 47min (p85 57) walk=629m wait=9m tr=0 | 185 ISBT Kashmere Gate (Lo->Regal / Palika Kendra 13st 29m 14.2kmh
+  least_walking: 57min (p85 72) walk=499m wait=15m tr=0 | AIRPORT-EXP-04 ISBT Kashmiri Gate->Regal / Palika Kendra 14st 35m 13.2kmh
+== KashmereGate->CP 2026-11-25T14:00 254ms crow=4184m
+  recommended,fewest_transfers: 60min (p85 77) walk=499m wait=15m tr=0 | AIRPORT-EXP-04 ISBT Kashmiri Gate->Regal / Palika Kendra 14st 38m 12.4kmh
+  least_walking: 57min (p85 68) walk=223m wait=16m tr=1 | 422STL-IPD Kashmere Gate City Bus->Indira Gandhi Stadium 8st 16m 21.4kmh | 910 Indira Gandhi Stadium->Shivaji Stadium Termin 7st 22m 11.6kmh
+  fastest: 57min (p85 73) walk=616m wait=9m tr=1 | 405 ISBT Kashmere Gate (Lo->Tilak Bridge 10st 28m 10.7kmh | 910 Tilak Bridge->Shivaji Stadium Termin 5st 11m 14.5kmh
+== KashmereGate->CP 2026-11-25T18:00 267ms crow=4184m
+  recommended,fastest,fewest_transfers: 59min (p85 83) walk=629m wait=6m tr=0 | 729 ISBT Kashmere Gate (Lo->Regal / Palika Kendra 14st 44m 9.4kmh
+  alternative: 60min (p85 75) walk=746m wait=15m tr=0 | 139 ISBT Kashmere Gate (OR->Shivaji Stadium Termin 15st 35m 18.7kmh
+  least_walking: 59min (p85 69) walk=588m wait=10m tr=1 | BYPASS EXPRESS ISBT Kashmere Gate (OR->Indira Gandhi Stadium 8st 14m 27.3kmh | 910 Indira Gandhi Stadium->Shivaji Stadium Termin 7st 27m 9.5kmh
+== KashmereGate->CP 2026-11-29T11:00 302ms crow=4184m
+  recommended,fewest_transfers: 46min (p85 64) walk=629m wait=7m tr=0 | 729 ISBT Kashmere Gate (Lo->Regal / Palika Kendra 14st 30m 13.6kmh
+  fastest: 43min (p85 67) walk=499m wait=7m tr=1 | 214 ISBT Kashmiri Gate->Delhi Gate (JLN Marg) 7st 17m 13.3kmh | 729 Delhi Gate (JLN Marg)->Regal / Palika Kendra 6st 13m 16.5kmh
+  least_walking: 50min (p85 68) walk=200m wait=10m tr=1 | 348 ISBT Kashmiri Gate->Indira Gandhi Stadium 8st 20m 14.2kmh | 910 Indira Gandhi Stadium->Shivaji Stadium Termin 7st 17m 14.8kmh
+== Rohini22->Azadpur 2026-11-25T09:00 118ms crow=10970m
+  recommended,fastest,fewest_transfers,least_walking: 59min (p85 88) walk=841m wait=4m tr=0 | 114A Begum Pur (Kanjhawala ->Azadpur / Kewal Park 28st 43m 19.1kmh
+  alternative: 66min (p85 93) walk=1511m wait=4m tr=0 | 174 Begum Pur (Kanjhawala ->Shalimar Bagh Crossing 27st 41m 18.9kmh
+  alternative: 76min (p85 100) walk=841m wait=20m tr=0 | 921 Begum Pur (Kanjhawala ->Azadpur / Kewal Park 28st 44m 18.5kmh
+== Rohini22->Azadpur 2026-11-25T14:00 138ms crow=10970m
+  recommended,fastest,least_walking: 69min (p85 94) walk=841m wait=9m tr=1 | 174 Begum Pur (Kanjhawala ->Netaji Subhash Palace  22st 39m 16.2kmh | 971 Netaji Subhash Palace ->Azadpur / Kewal Park 6st 10m 20.3kmh
+  alternative: 75min (p85 111) walk=841m wait=11m tr=0 | 114A Begum Pur (Kanjhawala ->Azadpur / Kewal Park 28st 53m 15.6kmh
+  fewest_transfers: 71min (p85 92) walk=1511m wait=5m tr=0 | 174 Begum Pur (Kanjhawala ->Shalimar Bagh Crossing 27st 45m 17.2kmh
+== Rohini22->Azadpur 2026-11-25T18:00 122ms crow=10970m
+  recommended,fastest,fewest_transfers,least_walking: 66min (p85 87) walk=841m wait=4m tr=0 | 114A Begum Pur (Kanjhawala ->Azadpur / Kewal Park 28st 50m 16.3kmh
+  alternative: 71min (p85 87) walk=1511m wait=4m tr=0 | 174 Begum Pur (Kanjhawala ->Shalimar Bagh Crossing 27st 45m 16.9kmh
+  alternative: 80min (p85 99) walk=1511m wait=6m tr=0 | 114EXT Begum Pur (Kanjhawala ->Shalimar Bagh Crossing 27st 52m 14.7kmh
+== Rohini22->Azadpur 2026-11-29T11:00 126ms crow=10970m
+  recommended,fastest,fewest_transfers: 64min (p85 99) walk=841m wait=3m tr=0 | 114A Begum Pur (Kanjhawala ->Azadpur / Kewal Park 28st 49m 16.7kmh
+  alternative: 67min (p85 87) walk=1511m wait=5m tr=0 | 174 Begum Pur (Kanjhawala ->Shalimar Bagh Crossing 27st 41m 18.7kmh
+  least_walking: 78min (p85 96) walk=344m wait=15m tr=0 | 102A Rohini Sec 22 Terminal->Azadpur Terminal 35st 58m 19.1kmh
+== AnandVihar->NehruPlace 2026-11-25T09:00 256ms crow=12624m
+  recommended: 84min (p85 105) walk=495m wait=8m tr=1 | 543A Anand Vihar ISBT Main ->Akhardham Temple  /  P 10st 19m 20.3kmh | 534 Akhardham Temple  /  P->Paras Cinema 17st 51m 13.5kmh
+  fastest: 83min (p85 114) walk=474m wait=12m tr=2 | OMS(+) Anand Vihar ISBT Main ->New Rajdhani Enclave / 6st 9m 23.8kmh | D-006 New Rajdhani Enclave /->Sunder Nagar  Market / 16st 33m 16.0kmh | 425 Sunder Nagar  Market /->Paras 
+  fewest_transfers,least_walking: 98min (p85 129) walk=415m wait=6m tr=0 | 534A Anand Vihar ISBT Termi->Paras Cinema 41st 86m 15.3kmh
+== AnandVihar->NehruPlace 2026-11-25T14:00 220ms crow=12624m
+  recommended,fastest,least_walking: 67min (p85 89) walk=495m wait=5m tr=1 | 543A Anand Vihar ISBT Main ->Nehru Nagar 18st 35m 24.0kmh | 427 Nehru Nagar->Paras Cinema 11st 20m 15.0kmh
+  fewest_transfers: 87min (p85 108) walk=769m wait=5m tr=0 | 534 Maharaj Pur Check Post->Paras Cinema 39st 71m 16.7kmh
+  alternative: 83min (p85 99) walk=652m wait=9m tr=1 | YMSPLUS Anand Vihar ISBT Main ->Patparganj / Patpargan 19st 21m 21.1kmh | 534 Samas Pur Village->Paras Cinema 19st 44m 16.5kmh
+== AnandVihar->NehruPlace 2026-11-25T18:00 252ms crow=12624m
+  recommended,fastest,least_walking: 76min (p85 95) walk=495m wait=9m tr=1 | 543A Anand Vihar ISBT Main ->Sri Niwaspuri / PG DAV 19st 39m 22.1kmh | 427 Sri Niwaspuri / PG DAV->Paras Cinema 10st 21m 13.8kmh
+  alternative: 88min (p85 105) walk=613m wait=27m tr=1 | ANAND VIHAR ISBT TO GURGAON Anand Vihar ISBT Main ->Sri Niwaspuri / PG DAV 19st 35m 24.5kmh | D-044 Sri Niwaspuri / PG DAV->Nehru Place 5st 18m 10.1kmh
+  fewest_transfers: 96min (p85 122) walk=495m wait=4m tr=0 | 534 Anand Vihar ISBT Main ->Paras Cinema 40st 85m 14.3kmh
+== AnandVihar->NehruPlace 2026-11-29T11:00 292ms crow=12624m
+  recommended,fastest: 66min (p85 85) walk=564m wait=7m tr=1 | 543A ISBT Anand Vihar->Bala Sahib Gurudwara 17st 28m 28.5kmh | 534A Bala Sahib Gurudwara->Paras Cinema 12st 24m 15.3kmh
+  fewest_transfers: 86min (p85 104) walk=495m wait=11m tr=0 | 534 Anand Vihar ISBT Main ->Paras Cinema 40st 68m 17.8kmh
+  least_walking: 91min (p85 111) walk=415m wait=5m tr=0 | 534A Anand Vihar ISBT Termi->Paras Cinema 41st 81m 16.3kmh
+== Dwarka->AIIMS 2026-11-25T09:00 157ms crow=16267m
+  recommended,fastest,fewest_transfers: 111min (p85 140) walk=1618m wait=20m tr=0 | 794ADOWN2 Dwarka Sec 5/11 Xing->SJ Hospital 34st 69m 18.1kmh
+  alternative: 116min (p85 144) walk=1288m wait=24m tr=1 | RL-75 Sec 5/11 Xing->SagarPur Vashisht Park 17st 27m 16.8kmh | 724 SagarPur Vashisht Park->AIIMS Ring Road 19st 47m 18.2kmh
+  least_walking: 138min (p85 162) walk=1080m wait=45m tr=0 | 724EXT Dwarka sec 4/5 & 11/12->AIIMS Ring Road 33st 78m 16.6kmh
+== Dwarka->AIIMS 2026-11-25T14:00 169ms crow=16267m
+  recommended,fastest,fewest_transfers: 106min (p85 124) walk=1618m wait=20m tr=0 | 794ADOWN2 Dwarka Sec 5/11 Xing->SJ Hospital 34st 63m 19.7kmh
+  least_walking: 115min (p85 134) walk=1080m wait=20m tr=0 | 724EXT Dwarka sec 4/5 & 11/12->AIIMS Ring Road 33st 80m 16.2kmh
+  alternative: 115min (p85 142) walk=1274m wait=22m tr=2 | D-9903(-) Dwarka Sector-18/18A->President Cabinet Apar 4st 8m 20.0kmh | 774B President Cabinet Apar->Kendriya Vidhyalaya AP 15st 34m 17.5kmh | 543A Kendriya Vidhyalaya AP-
+== Dwarka->AIIMS 2026-11-25T18:00 148ms crow=16267m
+  recommended,fastest,fewest_transfers: 97min (p85 117) walk=1618m wait=15m tr=0 | 794ADOWN2 Dwarka Sec 5/11 Xing->SJ Hospital 34st 59m 21.1kmh
+  alternative: 117min (p85 148) walk=1288m wait=24m tr=1 | RL-75 Sec 5/11 Xing->D Block Janak Puri 18st 37m 12.9kmh | 724A D Block Janak Puri->AIIMS Ring Road 18st 39m 21.6kmh
+  least_walking: 135min (p85 159) walk=1080m wait=45m tr=0 | 724EXT Dwarka sec 4/5 & 11/12->AIIMS Ring Road 33st 75m 17.3kmh
+== Dwarka->AIIMS 2026-11-29T11:00 167ms crow=16267m
+  recommended,fastest,fewest_transfers: 99min (p85 114) walk=1618m wait=20m tr=0 | 794ADOWN2 Dwarka Sec 5/11 Xing->SJ Hospital 34st 57m 22.1kmh
+  least_walking: 104min (p85 120) walk=1080m wait=20m tr=0 | 724EXT Dwarka sec 4/5 & 11/12->AIIMS Ring Road 33st 69m 18.9kmh
+  alternative: 105min (p85 127) walk=1396m wait=15m tr=2 | D-9903(+) Dwarka sec 4 / 5 Xing->President Cabinet Apar 2st 7m 18.5kmh | 718 President Cabinet Apar->Samalkha Crossing 12st 18m 28.9kmh | 543A Samalkha Crossing->AIIMS Rin
+latency ms: median 220, max 302

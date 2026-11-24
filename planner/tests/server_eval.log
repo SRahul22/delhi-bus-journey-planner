@@ -1,0 +1,50 @@
+INFO:     Started server process [10023]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+TravelTimeModel: observed_gps_segments (fallback: schedule x fitted hour factor); {'segments_with_any_observation': 77427, 'segment_cells': {'route_exact': 1504480, 'stop_pair': 1518691, 'schedule_x_segment_ratio': 693325, 'schedule_scaled': 103920}, 'wait_cells_observed': 1360907, 'factor_weekday': [0.72, 0.66, 0.63, 0.62, 0.66, 0.72, 0.79, 0.9, 0.99, 1.11, 1.13, 1.17, 1.21, 1.23, 1.25, 1.22, 1.24, 1.3, 1.49, 1.46, 1.3, 1.09, 0.92, 0.83], 'seg_stat': 'mean_s', 'load_s': 1.98}
+INFO:     127.0.0.1:54575 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54576 - "GET /journey?from_lat=28.647849&from_lng=77.164766&to_lat=28.6442&to_lng=77.189&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54577 - "GET /journey?from_lat=28.511924&from_lng=77.249214&to_lat=28.520404&to_lng=77.202805&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54578 - "GET /journey?from_lat=28.54189&from_lng=77.118172&to_lat=28.521428&to_lng=77.082028&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54579 - "GET /journey?from_lat=28.513714&from_lng=77.234915&to_lat=28.520404&to_lng=77.202805&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54580 - "GET /journey?from_lat=28.534581&from_lng=77.090406&to_lat=28.547989&to_lng=77.125228&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54581 - "GET /journey?from_lat=28.521336&from_lng=77.200058&to_lat=28.51206&to_lng=77.248708&depart=2026-10-28T18%3A30&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54582 - "GET /journey?from_lat=28.534232&from_lng=77.090282&to_lat=28.521345&to_lng=77.082131&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54583 - "GET /journey?from_lat=28.569422&from_lng=77.123579&to_lat=28.55523&to_lng=77.091282&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54584 - "GET /journey?from_lat=28.509283&from_lng=77.265&to_lat=28.49313&to_lng=77.303727&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54585 - "GET /journey?from_lat=28.628142&from_lng=77.245043&to_lat=28.630868&to_lng=77.277892&depart=2026-10-28T18%3A30&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54586 - "GET /journey?from_lat=28.745197&from_lng=77.13729&to_lat=28.746565&to_lng=77.095788&depart=2026-10-28T18%3A30&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54587 - "GET /journey?from_lat=28.543407&from_lng=77.310452&to_lat=28.56217&to_lng=77.33783&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54588 - "GET /journey?from_lat=28.6191&from_lng=77.28625&to_lat=28.627921&to_lng=77.244465&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54589 - "GET /journey?from_lat=28.750102&from_lng=77.150691&to_lat=28.725902&to_lng=77.162809&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54590 - "GET /journey?from_lat=28.629233&from_lng=77.277304&to_lat=28.641133&to_lng=77.229676&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54591 - "GET /journey?from_lat=28.668&from_lng=77.164283&to_lat=28.707497&to_lng=77.180549&depart=2026-10-28T18%3A30&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54592 - "GET /journey?from_lat=28.67615&from_lng=77.311883&to_lat=28.647077&to_lng=77.317582&depart=2026-10-28T18%3A30&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54593 - "GET /journey?from_lat=28.680765&from_lng=77.327745&to_lat=28.647011&to_lng=77.317959&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54594 - "GET /journey?from_lat=28.541725&from_lng=77.129447&to_lat=28.509433&to_lng=77.17875&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54595 - "GET /journey?from_lat=28.51386&from_lng=77.234645&to_lat=28.49313&to_lng=77.303727&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54596 - "GET /journey?from_lat=28.521316&from_lng=77.183047&to_lat=28.569671&to_lng=77.204431&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54597 - "GET /journey?from_lat=28.545123&from_lng=77.127987&to_lat=28.508091&to_lng=77.175853&depart=2026-10-28T18%3A30&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54598 - "GET /journey?from_lat=28.734583&from_lng=77.246633&to_lat=28.666517&to_lng=77.225883&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54599 - "GET /journey?from_lat=28.547989&from_lng=77.125228&to_lat=28.59718&to_lng=77.171499&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54600 - "GET /journey?from_lat=28.71679&from_lng=77.25794&to_lat=28.660309&to_lng=77.228301&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54601 - "GET /journey?from_lat=28.754235&from_lng=77.243242&to_lat=28.666517&to_lng=77.225883&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /journey?from_lat=28.610583&from_lng=77.113871&to_lat=28.592987&to_lng=77.162867&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54603 - "GET /journey?from_lat=28.592905&from_lng=77.163399&to_lat=28.54189&to_lng=77.118172&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54604 - "GET /journey?from_lat=28.720008&from_lng=77.107904&to_lat=28.80683&to_lng=77.048016&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54605 - "GET /journey?from_lat=28.6191&from_lng=77.28625&to_lat=28.6303&to_lng=77.2239&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54606 - "GET /journey?from_lat=28.574267&from_lng=77.228733&to_lat=28.6287&to_lng=77.2219&depart=2026-10-28T13%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54607 - "GET /journey?from_lat=28.549694&from_lng=77.117843&to_lat=28.591868&to_lng=77.081259&depart=2026-10-28T18%3A30&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54608 - "GET /journey?from_lat=28.62921&from_lng=77.221797&to_lat=28.571983&to_lng=77.227667&depart=2026-10-28T18%3A30&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54609 - "GET /journey?from_lat=28.649272&from_lng=77.239311&to_lat=28.684671&to_lng=77.331423&depart=2026-10-28T18%3A30&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54610 - "GET /journey?from_lat=28.612693&from_lng=77.305417&to_lat=28.639661&to_lng=77.243789&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54611 - "GET /journey?from_lat=28.53688&from_lng=77.287582&to_lat=28.56217&to_lng=77.33783&depart=2026-10-28T18%3A30&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54612 - "GET /journey?from_lat=28.531234&from_lng=77.088154&to_lat=28.665824&to_lng=77.222057&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54613 - "GET /journey?from_lat=28.569671&from_lng=77.204431&to_lat=28.700364&to_lng=77.205091&depart=2026-10-28T18%3A30&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54614 - "GET /journey?from_lat=28.703334&from_lng=77.263968&to_lat=28.682061&to_lng=77.054037&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54615 - "GET /journey?from_lat=28.70284&from_lng=77.075176&to_lat=28.579739&to_lng=77.212807&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54616 - "GET /journey?from_lat=28.720008&from_lng=77.107904&to_lat=28.828817&to_lng=76.988907&depart=2026-10-28T18%3A30&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54617 - "GET /journey?from_lat=28.579465&from_lng=77.101643&to_lat=28.527783&to_lng=77.2722&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54618 - "GET /journey?from_lat=28.609265&from_lng=77.100931&to_lat=28.5487&to_lng=77.256981&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54619 - "GET /journey?from_lat=28.521316&from_lng=77.183047&to_lat=28.668198&to_lng=77.229219&depart=2026-10-28T09%3A00&max_options=3 HTTP/1.1" 200 OK

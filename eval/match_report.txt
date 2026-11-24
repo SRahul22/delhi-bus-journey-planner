@@ -1,0 +1,10 @@
+ticket stop names: 7552 unique, 5119798 stop mentions (boarding + alighting)
+  exact :  2632 names ( 34.9%)   56.7% of mentions
+  norm  :  1552 names ( 20.6%)   18.8% of mentions
+  part  :   924 names ( 12.2%)    9.5% of mentions
+  fuzzy :  1142 names ( 15.1%)    7.1% of mentions
+  none  :  1302 names ( 17.2%)    7.8% of mentions
+top unmatched names: Mahipal Pur; Badarpur Border; Jahangir Puri Metro Station; District Centre Janak Puri; G.T.K Depot; Nangloi Metro Station (T); Nhai / District Court / Ig Hospital Dwarka Sec 10; Vayusena Bad; Reddison Hotel Mahipal Pur / Rang Puri (Nh8 Circle); Lado Sarai Dda Flats; Jahangirpuri Metro Station; Rang Puri; P.S. Pahar Gunj; Aerocity; Sarvpriya Vihar / Hauz Khas Metro Station
+top 6000 OD x route rows: both ends matched 93.2% (93.9% of their tickets); route-aware methods: [('route_exact', 5864), ('route_norm', 1921), ('route_part', 1203), ('route_partial', 1102), ('route_fuzzy', 817), ('none', 421), ('fuzzy', 255), ('exact', 210), ('norm', 119), ('part', 88)]
+selected: 60 pairs; {('direct', 'long'): 14, ('direct', 'medium'): 18, ('direct', 'short'): 18, ('transfer', 'long'): 3, ('transfer', 'medium'): 6, ('transfer', 'short'): 1}
+regions: {'South': 17, 'West': 14, 'Central': 10, 'North': 10, 'East': 9}  slots: {'am_peak': 25, 'pm_peak': 20, 'offpeak': 15}

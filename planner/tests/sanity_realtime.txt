@@ -1,0 +1,54 @@
+### 2026-10-28T08:45
+realtime replay clock 2026-10-28T08:45:02+05:30 1.003
+== KashmereGate->CP 2026-10-28T08:45 411ms crow=4184m
+  recommended,fastest,fewest_transfers: 39min (p85 49) walk=629m wait=3m tr=0 | 729 ISBT Kashmere Gate (Lo->Regal / Palika Kendra 14st 28m 14.9kmh
+--
+== Rohini22->Azadpur 2026-10-28T08:45 197ms crow=10970m
+  recommended,least_walking: 65min (p85 98) walk=841m wait=9m tr=0 | 114A Begum Pur (Kanjhawala ->Azadpur / Kewal Park 28st 45m 18.4kmh
+--
+== AnandVihar->NehruPlace 2026-10-28T08:45 389ms crow=12624m
+  recommended,fastest: 81min (p85 99) walk=613m wait=11m tr=1 | 543A Anand Vihar ISBT Main ->Sri Niwaspuri / PG DAV 19st 49m 17.8kmh | D-044 Sri Niwaspuri / PG DAV->Nehru Place 5st 13m 13.6kmh
+--
+== Dwarka->AIIMS 2026-10-28T08:45 284ms crow=16267m
+  recommended,least_walking: 115min (p85 142) walk=1080m wait=20m tr=0 | 724EXT Dwarka sec 4/5 & 11/12->AIIMS Ring Road 33st 80m 16.2kmh
+--
+latency ms: median 389, max 411
+### historical same time
+== KashmereGate->CP 2026-10-28T08:45 272ms crow=4184m
+  recommended,fastest,fewest_transfers: 41min (p85 52) walk=629m wait=3m tr=0 | 729 ISBT Kashmere Gate (Lo->Regal / Palika Kendra 14st 30m 14.0kmh
+--
+== Rohini22->Azadpur 2026-10-28T08:45 113ms crow=10970m
+  recommended,fastest,fewest_transfers,least_walking: 59min (p85 73) walk=841m wait=4m tr=0 | 114A Begum Pur (Kanjhawala ->Azadpur / Kewal Park 28st 43m 19.3kmh
+--
+== AnandVihar->NehruPlace 2026-10-28T08:45 219ms crow=12624m
+  recommended: 82min (p85 101) walk=613m wait=7m tr=1 | 543A Anand Vihar ISBT Main ->Gupta Market 21st 54m 17.4kmh | D-014 Gupta Market->Nehru Place 7st 13m 16.8kmh
+--
+== Dwarka->AIIMS 2026-10-28T08:45 157ms crow=16267m
+  recommended,least_walking: 117min (p85 143) walk=1080m wait=20m tr=0 | 724EXT Dwarka sec 4/5 & 11/12->AIIMS Ring Road 33st 82m 15.9kmh
+### 2026-10-28T18:00
+realtime replay clock 2026-10-28T18:00:02+05:30 1.082
+== KashmereGate->CP 2026-10-28T18:00 436ms crow=4184m
+  recommended,fastest,fewest_transfers,least_walking: 54min (p85 72) walk=409m wait=5m tr=0 | 171 ISBT Kashmere Gate (Lo->Shivaji Stadium Termin 13st 43m 9.9kmh
+--
+== Rohini22->Azadpur 2026-10-28T18:00 199ms crow=10970m
+  recommended,fastest,fewest_transfers,least_walking: 75min (p85 99) walk=841m wait=2m tr=0 | 114A Begum Pur (Kanjhawala ->Azadpur / Kewal Park 28st 61m 13.4kmh
+--
+== AnandVihar->NehruPlace 2026-10-28T18:00 425ms crow=12624m
+  recommended,fastest,least_walking: 78min (p85 94) walk=495m wait=9m tr=1 | 543A Anand Vihar ISBT Main ->Nehru Nagar 18st 40m 21.1kmh | 427 Nehru Nagar->Paras Cinema 11st 22m 13.6kmh
+--
+== Dwarka->AIIMS 2026-10-28T18:00 249ms crow=16267m
+  recommended,fastest,fewest_transfers: 100min (p85 121) walk=1618m wait=15m tr=0 | 794ADOWN2 Dwarka Sec 5/11 Xing->SJ Hospital 34st 62m 20.1kmh
+--
+latency ms: median 425, max 436
+### historical same time
+== KashmereGate->CP 2026-10-28T18:00 285ms crow=4184m
+  recommended,fastest,fewest_transfers: 59min (p85 83) walk=629m wait=6m tr=0 | 729 ISBT Kashmere Gate (Lo->Regal / Palika Kendra 14st 44m 9.4kmh
+--
+== Rohini22->Azadpur 2026-10-28T18:00 113ms crow=10970m
+  recommended,fastest,fewest_transfers,least_walking: 66min (p85 87) walk=841m wait=4m tr=0 | 114A Begum Pur (Kanjhawala ->Azadpur / Kewal Park 28st 50m 16.3kmh
+--
+== AnandVihar->NehruPlace 2026-10-28T18:00 236ms crow=12624m
+  recommended,fastest,least_walking: 76min (p85 95) walk=495m wait=9m tr=1 | 543A Anand Vihar ISBT Main ->Sri Niwaspuri / PG DAV 19st 39m 22.1kmh | 427 Sri Niwaspuri / PG DAV->Paras Cinema 10st 21m 13
+--
+== Dwarka->AIIMS 2026-10-28T18:00 143ms crow=16267m
+  recommended,fastest,fewest_transfers: 97min (p85 117) walk=1618m wait=15m tr=0 | 794ADOWN2 Dwarka Sec 5/11 Xing->SJ Hospital 34st 59m 21.1kmh

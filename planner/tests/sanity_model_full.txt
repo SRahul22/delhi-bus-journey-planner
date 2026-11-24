@@ -1,0 +1,33 @@
+== KashmereGate->CP 2026-10-28T09:00 305ms crow=4184m
+  recommended,direct,fastest,fewest_transfers: 42min (p85 54) walk=629m wait=3m tr=0 | 729 ISBT Kashmere Gate (Lo->Regal / Palika Kendra 14st 30m 14.0kmh
+  alternative: 48min (p85 63) walk=629m wait=10m tr=0 | 185 ISBT Kashmere Gate (Lo->Regal / Palika Kendra 13st 29m 14.1kmh
+  least_walking: 56min (p85 78) walk=499m wait=12m tr=0 | AIRPORT-EXP-04 ISBT Kashmiri Gate->Regal / Palika Kendra 14st 36m 12.8kmh
+== KashmereGate->CP 2026-10-28T18:30 303ms crow=4184m
+  recommended,direct,fewest_transfers: 59min (p85 83) walk=746m wait=15m tr=0 | 139 ISBT Kashmere Gate (OR->Shivaji Stadium Termin 15st 34m 19.1kmh
+  fastest: 55min (p85 75) walk=588m wait=10m tr=1 | BYPASS EXPRESS ISBT Kashmere Gate (OR->Indira Gandhi Stadium 8st 14m 26.5kmh | 910 Indira Gandhi Stadium->Shivaji Stadium Termin 7st 22m 11.7kmh
+  least_walking: 71min (p85 98) walk=409m wait=19m tr=0 | 171 ISBT Kashmere Gate (Lo->Shivaji Stadium Termin 13st 47m 9.2kmh
+== Rohini22->Azadpur 2026-10-28T09:00 110ms crow=10970m
+  recommended,direct,fastest,least_walking,fewest_transfers: 60min (p85 81) walk=841m wait=4m tr=0 | 114A Begum Pur (Kanjhawala ->Azadpur / Kewal Park 28st 44m 18.6kmh
+  alternative: 69min (p85 100) walk=1511m wait=4m tr=0 | 174 Begum Pur (Kanjhawala ->Shalimar Bagh Crossing 27st 43m 17.8kmh
+  alternative: 66min (p85 92) walk=841m wait=11m tr=1 | 182A Begum Pur (Kanjhawala ->Netaji Subhash Palace  22st 35m 17.8kmh | 971 Netaji Subhash Palace ->Azadpur / Kewal Park 6st 8m 24.3kmh
+== Rohini22->Azadpur 2026-10-28T18:30 139ms crow=10970m
+  recommended,direct,least_walking,fewest_transfers: 77min (p85 101) walk=841m wait=5m tr=0 | 114A Begum Pur (Kanjhawala ->Azadpur / Kewal Park 28st 61m 13.6kmh
+  fastest: 77min (p85 97) walk=1732m wait=4m tr=0 | 174 Rohini Sec21->Shalimar Bagh Crossing 26st 48m 15.3kmh
+  alternative: 83min (p85 102) walk=1732m wait=6m tr=0 | 114EXT Rohini Sec21->Shalimar Bagh Crossing 26st 52m 14.1kmh
+== AnandVihar->NehruPlace 2026-10-28T09:00 348ms crow=12624m
+  recommended,fastest: 85min (p85 111) walk=495m wait=9m tr=1 | 543A Anand Vihar ISBT Main ->ISBT Sarai Kale Khan 15st 29m 22.2kmh | 534 ISBT Sarai Kale Khan->Paras Cinema 13st 40m 10.4kmh
+  direct,fewest_transfers: 99min (p85 127) walk=769m wait=5m tr=0 | 534 Maharaj Pur Check Post->Paras Cinema 39st 83m 14.3kmh
+  least_walking: 86min (p85 120) walk=474m wait=14m tr=2 | OMS(+) Anand Vihar ISBT Main ->New Rajdhani Enclave / 6st 9m 23.5kmh | D-006 New Rajdhani Enclave /->Delhi Public School 17st 35m 15.4kmh | 4
+== AnandVihar->NehruPlace 2026-10-28T18:30 269ms crow=12624m
+  recommended,fastest: 84min (p85 109) walk=544m wait=15m tr=1 | 543A Anand Vihar ISBT Main ->Sri Niwaspuri / PG DAV 19st 42m 20.5kmh | D-032 Sri Niwaspuri / PG DAV->Nehru Place 10st 19m 14.6kmh
+  least_walking,fewest_transfers: 102min (p85 131) walk=495m wait=4m tr=0 | 534 Anand Vihar ISBT Main ->Paras Cinema 40st 91m 13.3kmh
+  alternative: 108min (p85 144) walk=495m wait=11m tr=0 | 534A Anand Vihar ISBT Main ->Paras Cinema 40st 90m 13.5kmh
+== Dwarka->AIIMS 2026-10-28T09:00 156ms crow=16267m
+  recommended,direct,fewest_transfers: 120min (p85 158) walk=1618m wait=20m tr=0 | 794ADOWN2 Dwarka Sec 5/11 Xing->SJ Hospital 34st 77m 16.2kmh
+  fastest: 117min (p85 158) walk=1288m wait=25m tr=1 | RL-75 Sec 5/11 Xing->Supply Depot 22st 35m 17.7kmh | 724 Supply Depot->AIIMS Ring Road 15st 39m 17.6kmh
+  least_walking: 138min (p85 191) walk=1080m wait=45m tr=0 | 724EXT Dwarka sec 4/5 & 11/12->AIIMS Ring Road 33st 78m 16.6kmh
+== Dwarka->AIIMS 2026-10-28T18:30 136ms crow=16267m
+  recommended,direct,fewest_transfers: 106min (p85 136) walk=1618m wait=15m tr=0 | 794ADOWN2 Dwarka Sec 5/11 Xing->SJ Hospital 34st 69m 18.1kmh
+  fastest: 100min (p85 130) walk=1271m wait=22m tr=2 | 794ADOWN2 Dwarka Sec 5/11 Xing->J M International Scho 3st 9m 18.3kmh | 764 J M International Scho->Kendriya Vidhyalaya AP 22st 23m 22.5kmh | 543
+  least_walking: 135min (p85 185) walk=1080m wait=45m tr=0 | 724EXT Dwarka sec 4/5 & 11/12->AIIMS Ring Road 33st 75m 17.3kmh
+latency ms: median 269, max 348

@@ -1,0 +1,12 @@
+INFO:     Started server process [7346]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+TravelTimeModel: observed_gps_segments (fallback: schedule x fitted hour factor); {'segments_with_any_observation': 77164, 'segment_cells': {'route_exact': 1213279, 'stop_pair': 1681748, 'schedule_x_segment_ratio': 808845, 'schedule_scaled': 116544}, 'wait_cells_observed': 1111071, 'factor_weekday': [0.66, 0.62, 0.59, 0.59, 0.62, 0.68, 0.75, 0.85, 0.93, 1.04, 1.05, 1.08, 1.11, 1.11, 1.11, 1.1, 1.12, 1.18, 1.33, 1.29, 1.16, 0.99, 0.84, 0.75], 'load_s': 1.7}
+INFO:     127.0.0.1:54418 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54420 - "GET /journey?from_lat=28.647&from_lng=77.316&to_lat=28.5485&to_lng=77.252&realtime=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54422 - "GET /journey?from_lat=28.6675&from_lng=77.2290&to_lat=28.6315&to_lng=77.2167&realtime=1 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [7346]
