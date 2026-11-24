@@ -14,16 +14,40 @@ import numpy as np
 from scipy.spatial import cKDTree
 
 from ttmodel import TravelTimeModel
+import v2ext
 
 # Final ride-time correction: XGBoost model v3 (model/v3/predict.py, trained by model/v3/scripts/xgb_final.py).
 # V3_MODE=xgb (default) | lgbm | calib | off. If xgboost or the model files are missing, the plain model is used.
 import sys as _sys
 os.environ.setdefault("V3_MODE", "xgb")
-_sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "model", "v3"))
+_sys.path.insert(0, os.environ.get("V3_PREDICT_DIR") or os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "model", "v3"))
 try:
     from predict import correct as v3_correct
 except Exception as _e:  # pragma: no cover
     print("model v3 not loaded:", _e); v3_correct = None
+
+
+DEFAULT_V3_MIN_RIDE_S = "3600"  # config C (docs/results/integration/rerun_val_ABC.md)
+
+
+def v3_min_ride_s():
+    """V3_MIN_RIDE_S (default 3600 = config C, live since 2026-11-24): the v3 correction is applied to a bus leg only
+    when the planner's own ride estimate (ttmodel blend) for that leg is >= this many seconds, i.e. XGBoost only on
+    rides over 60 min. V3_MIN_RIDE_S=0 applies it to every leg (the old default)."""
+    try:
+        return float(os.environ.get("V3_MIN_RIDE_S", DEFAULT_V3_MIN_RIDE_S) or 0)
+    except ValueError:
+        return float(DEFAULT_V3_MIN_RIDE_S)
+
+
+def v3_applies(ride_s):
+    return float(ride_s) >= v3_min_ride_s()
+
+
+try:  # v2 time band (ml, contract 3): band(...) -> (p50_s, p85_s or None); used when V2_BAND=1
+    from predict import band as v3_band
+except Exception:  # noqa: BLE001  (older predict.py without band)
+    v3_band = None
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 NET_PATH = os.path.join(HERE, "cache", "network.pkl")
@@ -148,6 +172,20 @@ class Planner:
         route_stops = self.route_stops
         stop_routes = self.stop_routes
         model = self.model
+        # per-query hour caches (same values as model.waits/model.cum; avoids millions of tuple-key lookups)
+        W, C = {}, {}
+
+        def waits_h(h):
+            w = W.get(h)
+            if w is None:
+                w = W[h] = model.waits(dt, h)
+            return w
+
+        def cum_h(h):
+            c = C.get(h)
+            if c is None:
+                c = C[h] = model.cum(dt, h)
+            return c
         for k in range(1, max_rounds + 1):
             Q = {}
             for s in marked:
@@ -177,11 +215,11 @@ class Planner:
                         pt = prev.get(s)
                         if pt is not None:
                             h = int(pt // 3600) % 24
-                            tb = pt + model.waits(dt, h)[ri][i]
+                            tb = pt + waits_h(h)[ri][i]
                             if tb < ta:
                                 t_board = tb
                                 bpos = i
-                                cumr = model.cum(dt, int(tb // 3600) % 24)[ri]
+                                cumr = cum_h(int(tb // 3600) % 24)[ri]
             # footpaths from bus-reached stops
             for s, (ri, bp, i) in list(bus_k.items()):
                 base = arr_k[s] if par_k[s][0] == "bus" else None
@@ -286,6 +324,49 @@ class Planner:
                 out.append(_display_name(self.routes[rj]["short_name"]))
         return sorted(set(out))[:limit]
 
+    def attractive_set(self, ri, i, j, t_dep, dt):
+        """T2.2: every route pattern serving board -> alight in order whose ride time (v1 tables, same
+        departure time) is <= 1.1 x the best one. Always contains ri. Returns [(rj, p, q, ride_s)]."""
+        s0, s1 = self.route_stops[ri][i], self.route_stops[ri][j]
+        cands = []
+        for rj, p in self.stop_routes[s0]:
+            if rj == ri:
+                q = j
+            else:
+                ss = self.route_stops[rj]
+                try:
+                    q = ss.index(s1, p + 1)
+                except ValueError:
+                    continue
+            cands.append((rj, p, q, self.model.ride(rj, p, q, t_dep, dt)[0]))
+        if not cands:
+            return []
+        best = min(c[3] for c in cands)
+        return [c for c in cands if c[0] == ri or c[3] <= v2ext.ATTRACT * best]
+
+    def pooled_wait(self, ri, i, j, t_arr, dt, v1_wait):
+        """Pooled wait at the boarding stop over the attractive set. Falls back to the v1 wait."""
+        aset = self.attractive_set(ri, i, j, t_arr + v1_wait, dt)
+        rids = []
+        for rj, _, _, _ in aset:
+            try:
+                rids.append(int(self.routes[rj]["route_id"]))
+            except ValueError:
+                pass
+        res = None
+        if rids:
+            try:
+                res = v2ext.pooled().wait(int(self.stop_id[self.route_stops[ri][i]]), rids, int(t_arr // 3600) % 24, dt)
+            except ValueError:
+                res = None
+        alts = [dict(route=_display_name(self.routes[rj]["short_name"]), route_id=self.routes[rj]["route_id"],
+                     ride_s=round(r)) for rj, _, _, r in sorted(aset, key=lambda c: c[3]) if rj != ri]
+        if res is None:
+            return v1_wait, dict(wait_source="v1", alternatives=alts)
+        w, n, nd = res
+        return w, dict(wait_source="pooled", wait_v1_s=round(v1_wait), pooled_n_gaps=n, pooled_n_days=nd,
+                       alternatives=alts)
+
     def time_journey(self, skel, o, d, t0, dt, base_date):
         """Exact time-dependent timing of a leg skeleton. o,d = (lat,lon)."""
         model = self.model
@@ -296,6 +377,8 @@ class Planner:
         wait_var = 0.0   # wait: p85 of a uniform wait is 1.7x its mean; independent across legs
         cur_pt = o
         nbus = 0
+        pooled_on = v2ext.wait_mode() == "pooled"
+        band_parts = []  # (p50, p85) per wait / ride component, for the V2_BAND log-normal combination (A3)
 
         def ts(sec):
             return (base_date + timedelta(seconds=sec)).isoformat()
@@ -328,14 +411,23 @@ class Planner:
             s0, s1 = self.route_stops[ri][i], self.route_stops[ri][j]
             walk_leg(cur_pt, (self.stop_lat[s0], self.stop_lon[s0]), prev_name, self.stop_name[s0])
             wait = model.wait_s(ri, i, t, dt)
+            wait_extra = {}
+            if pooled_on:
+                wait, wait_extra = self.pooled_wait(ri, i, j, t, dt, wait)
             t_dep = t + wait
             ride, ride85 = model.ride(ri, i, j, t_dep, dt)
             global v3_correct
-            if v3_correct is not None and os.environ.get("V3_MODE", "xgb") != "off":
+            if v3_correct is not None and os.environ.get("V3_MODE", "xgb") != "off" and v3_applies(ride):
                 try:
-                    new = v3_correct(r["route_id"], self.stop_id[s0], self.stop_id[s1],
-                                     base_date + timedelta(seconds=float(t_dep)), ride, None, j - i, None)
-                    if new and new > 0:
+                    fn = v3_band if (v3_band is not None and v2ext.band_on()) else v3_correct
+                    new = fn(r["route_id"], self.stop_id[s0], self.stop_id[s1],
+                             base_date + timedelta(seconds=float(t_dep)), ride, None, j - i, None)
+                    if isinstance(new, (tuple, list)) and new[1] is None:
+                        new = new[0]
+                    if isinstance(new, (tuple, list)):  # contract 3 (V2_BAND): (p50_s, p85_s)
+                        if new[0] and new[0] > 0:
+                            ride, ride85 = float(new[0]), max(float(new[1]), float(new[0]))
+                    elif new and new > 0:
                         ride85 *= new / max(ride, 1.0); ride = float(new)  # keep the p85 band proportional
                 except Exception as e:
                     print("model v3 disabled:", e); v3_correct = None
@@ -347,17 +439,36 @@ class Planner:
                 wait_s=round(wait), ride_s=round(ride), ride_p85_s=round(ride85), distance_m=round(dist),
                 speed_kmh=round(dist / max(ride, 1) * 3.6, 1),
                 arrive_at_stop=ts(t), depart=ts(t_dep), arrive=ts(t_dep + ride),
-                alt_routes=self.alt_routes(ri, i, j), polyline=self._polyline(ri, i, j)))
+                alt_routes=self.alt_routes(ri, i, j), polyline=self._polyline(ri, i, j), **wait_extra))
             t = t_dep + ride
             p85_extra += ride85 - ride
             wait_var += (0.7 * wait) ** 2
+            band_parts.append((ride, ride85))
+            if wait > 0:
+                band_parts.append((wait, 1.7 * wait))  # same 1.7x wait p85 as v1
             cur_pt = (self.stop_lat[s1], self.stop_lon[s1])
             prev_name = self.stop_name[s1]
             nbus += 1
         walk_leg(cur_pt, d, prev_name, "Destination")
         bus_legs = [l for l in legs if l["mode"] == "bus"]
+        p85 = t - t0 + p85_extra + wait_var ** 0.5
+        band_version = "v1_p85"
+        if v2ext.band_on() and band_parts:
+            walk_s = total_walk / WALK_SPEED
+            _, p85 = v2ext.combine_lognormal(band_parts, fixed_s=walk_s)
+            p85 = max(p85, t - t0)  # the point estimate stays duration_s
+            band_version = "v2_lognormal"
+            sh = v2ext.d2d_shifts(model.model_dir)
+            if sh:
+                dep_dt = base_date + timedelta(seconds=float(t0))
+                k = f"{v2ext.bucket(t - t0)}|{'peak' if v2ext.is_peak(dep_dt) else 'offpeak'}"
+                s = sh.get(k, sh.get("global"))
+                if s is not None:
+                    p85 = max(t - t0, p85 * float(np.exp(s)))
+                    band_version = "v2_lognormal+d2d"
         return dict(
-            depart=ts(t0), arrive=ts(t), duration_s=round(t - t0), duration_p85_s=round(t - t0 + p85_extra + wait_var ** 0.5),
+            depart=ts(t0), arrive=ts(t), duration_s=round(t - t0), duration_p85_s=round(p85),
+            band_version=band_version,
             walk_m=round(total_walk), transfers=max(nbus - 1, 0),
             wait_s=sum(l["wait_s"] for l in bus_legs), ride_s=sum(l["ride_s"] for l in bus_legs),
             routes=[l["route"] for l in bus_legs],
@@ -380,7 +491,8 @@ class Planner:
                     note="same routes and stops, leaving at the quietest of %s on the same day"
                          % ", ".join("%02d:00" % h for h in QUIET_HOURS))
 
-    def plan(self, from_lat, from_lng, to_lat, to_lng, depart=None, max_options=3, compare_quiet=True, quiet_planner=None):
+    def plan(self, from_lat, from_lng, to_lat, to_lng, depart=None, max_options=3, compare_quiet=True, quiet_planner=None,
+             arrive_by=None):
         """quiet_planner: planner whose (historical) model times the quiet-hour reference; defaults to self.
         The realtime app passes the historical planner so live ratios never leak into the comparison."""
         tstart = time.time()
@@ -390,6 +502,8 @@ class Planner:
             depart = depart.replace(tzinfo=IST)
         else:
             depart = depart.astimezone(IST)
+        if arrive_by is not None:
+            arrive_by = arrive_by.replace(tzinfo=IST) if arrive_by.tzinfo is None else arrive_by.astimezone(IST)
         base_date = depart.replace(hour=0, minute=0, second=0, microsecond=0)
         t0 = (depart - base_date).total_seconds()
         dt = 1 if depart.weekday() >= 5 else 0
@@ -448,6 +562,8 @@ class Planner:
             wd = walk_only[0]["duration_s"]
             options = [op for op in options if not op["routes"] or op["duration_s"] < wd]
         selected = self._select(options, max_options)
+        if arrive_by is not None:
+            selected = self._rank_on_time(options, selected, (arrive_by - depart).total_seconds(), max_options)
         for op in selected:
             if compare_quiet:
                 op["quiet_hour"] = (quiet_planner or self)._quiet_hour(op, o, d, dt, base_date)
@@ -455,9 +571,29 @@ class Planner:
             op.pop("_skel", None)
         return dict(
             query=dict(from_lat=from_lat, from_lng=from_lng, to_lat=to_lat, to_lng=to_lng, depart=depart.isoformat(),
+                       arrive_by=arrive_by.isoformat() if arrive_by is not None else None,
                        daytype="weekend" if dt else "weekday", straight_line_m=round(crow)),
+            band_version=selected[0]["band_version"] if selected else None,
+            wait_mode=v2ext.wait_mode(),
             model=dict(source=self.model.source, stats=self.model.stats),
             options=selected, n_candidates=len(options), compute_ms=round((time.time() - tstart) * 1000))
+
+    @staticmethod
+    def _rank_on_time(options, selected, deadline_s, n=3):
+        """T2.4: on_time_probability = P(total <= deadline) from each option's band (log-normal, section 4).
+        Options are then ranked by that probability; the most likely on-time option is always shown."""
+        for o in options:
+            o["on_time_probability"] = round(v2ext.on_time_probability(o["duration_s"], o["duration_p85_s"],
+                                                                       deadline_s), 4)
+        if not selected:
+            return selected
+        best = max(options, key=lambda o: (o["on_time_probability"], -o["duration_s"]))
+        if all(c is not best for c in selected):
+            best.setdefault("labels", [])
+            selected = (selected if len(selected) < n else selected[:-1]) + [best]
+        best["labels"] = list(best.get("labels", [])) + ["most_likely_on_time"]
+        selected.sort(key=lambda o: (-o["on_time_probability"], o["duration_s"]))
+        return selected
 
     @staticmethod
     def _select(options, n):

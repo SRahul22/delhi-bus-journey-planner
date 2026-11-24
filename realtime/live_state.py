@@ -32,6 +32,12 @@ from datetime import datetime, timedelta, timezone
 
 import numpy as np
 
+import kf as kfmod
+
+# V2_LIVE=ratio (default, v1 behaviour: hierarchical shrunk ratios over the last 30 min) or kf (per-segment
+# Kalman state with horizon forecasts, realtime/kf.py). Read at LiveState construction.
+V2_LIVE_DEFAULT = "ratio"
+
 IST = timezone(timedelta(hours=5, minutes=30))
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
@@ -88,7 +94,7 @@ class _Track:
 class Snapshot:
     """Immutable view used by readers: per flat segment log-ratio and counts, plus live vehicles."""
 
-    def __init__(self, now, logr, n_seg, n_area, city, n_obs, vehicles):
+    def __init__(self, now, logr, n_seg, n_area, city, n_obs, vehicles, kf=None):
         self.now = now
         self.logr = logr            # float32 [n_flat]
         self.ratio = np.exp(logr)
@@ -97,17 +103,22 @@ class Snapshot:
         self.city = city            # (ratio, minutes)
         self.n_obs = n_obs
         self.vehicles = vehicles    # ri -> list of (along_m, t_unix, next_k, veh)
+        self.kf = kf                # V2_LIVE=kf: kf.SegmentKF.state() dict (horizon forecasts), else None
 
 
 class LiveState:
-    def __init__(self, net, model, shapes_csv=None, patterns_csv=None, routes_txt=None, window=WINDOW):
+    def __init__(self, net, model, shapes_csv=None, patterns_csv=None, routes_txt=None, window=WINDOW, mode=None):
+        self.mode = (mode or os.environ.get("V2_LIVE", V2_LIVE_DEFAULT)).strip().lower()
+        if self.mode not in ("ratio", "kf"):
+            self.mode = V2_LIVE_DEFAULT
         self.net = net
         self.model = model
         self.window = window
         shapes_csv = _first_existing(shapes_csv, os.environ.get("ROUTE_SHAPES"),
                                      os.path.join(REPO, "model", "work", "route_shapes.csv"),
                                      "E:/hackathon-work/route_shapes.csv")
-        patterns_csv = _first_existing(patterns_csv, os.path.join(REPO, "model", "route_patterns.csv"))
+        patterns_csv = _first_existing(patterns_csv, os.path.join(os.environ.get("MODEL_DIR", ""), "route_patterns.csv"),
+                                       os.path.join(REPO, "model", "route_patterns.csv"))
         routes_txt = _first_existing(routes_txt, os.path.join(REPO, "data", "gtfs", "routes.txt"),
                                      "E:/hackathon-data/gtfs/routes.txt")
         routes = net["routes"]
@@ -152,6 +163,9 @@ class LiveState:
         self.snapshot = None
         self.keep_history = False  # True: never trim old observations/passings (offline validation)
         self.stats = dict(pings=0, obs=0, passings=0)
+        self.kf = None
+        if self.mode == "kf":
+            self.kf = kfmod.SegmentKF(self.n_flat, self.gx, self.gy, kfmod.seg_sigma(model), **kfmod.load_params())
 
     # ------------------------------------------------------------------ setup
     def _load_geometry(self, shapes_csv, patterns_csv):
@@ -313,11 +327,14 @@ class LiveState:
             return {k: np.array(v) for k, v in self._pass.items()}
 
     # ------------------------------------------------------------------ snapshot
-    def compute(self, now, window=None):
-        """Ratios as of `now` (unix) from observations that finished in (now-window, now]."""
+    def compute(self, now, window=None, n_max=None):
+        """Ratios as of `now` (unix) from observations that finished in (now-window, now].
+        n_max: only the first n_max observations (those emitted by `now`; used by offline evaluation)."""
         window = window or self.window
         o = self.observations()
         m = (o["t1"] <= now) & (o["t1"] > now - window)
+        if n_max is not None:
+            m[n_max:] = False
         f, lr, w = o["f"][m], o["logr"][m], o["w"][m]
         nf = self.n_flat
         S_seg = np.bincount(f, weights=w * lr, minlength=nf)
@@ -341,6 +358,13 @@ class LiveState:
 
     def refresh(self, now):
         logr, n_seg, n_area, city, n_obs = self.compute(now)
+        kfs = None
+        if self.kf is not None:
+            if self.kf.t is not None and now < self.kf.t:   # clock moved back (POST /realtime/clock): restart
+                self.kf.reset()
+            self.kf.advance(self.observations(), now)
+            kfs = self.kf.state()
+            logr = kfmod.forecast(kfs, 0.0)[0].astype(np.float32)
         vehicles = defaultdict(list)
         with self._lock:
             dead = []
@@ -360,12 +384,14 @@ class LiveState:
             # keep observations/passings bounded in a long-running service (2 h)
             if not self.keep_history and len(self._obs["t1"]) > 400_000:
                 self._trim(now - 7200)
-        self.snapshot = Snapshot(now, logr, n_seg, n_area, city, n_obs, dict(vehicles))
+        self.snapshot = Snapshot(now, logr, n_seg, n_area, city, n_obs, dict(vehicles), kf=kfs)
         return self.snapshot
 
     def _trim(self, tmin):
         for store, col in ((self._obs, "t1"), (self._pass, "t")):
             keep = [i for i, t in enumerate(store[col]) if t >= tmin]
+            if store is self._obs and self.kf is not None:   # keep the KF cursor on the same observation
+                self.kf.cursor = int(np.searchsorted(np.array(keep, np.int64), self.kf.cursor))
             for k in list(store):
                 v = store[k]
                 store[k] = [v[i] for i in keep]
@@ -399,7 +425,15 @@ class LiveState:
             if nk > k or along >= pdist[k] or nk < 1:
                 continue
             h, dt = ist_hour_dt(t)
-            segs = self.hist[o:o + len(pdist) - 1, dt, h] * snap.ratio[o:o + len(pdist) - 1]
+            hseg = self.hist[o:o + len(pdist) - 1, dt, h]
+            if snap.kf is not None:
+                # horizon of each segment = when the bus reaches it (historical cumulative time from its position)
+                hz = np.concatenate([[0.0], np.cumsum(hseg[nk - 1:k])])[:-1] + (t - now)
+                lr = kfmod.forecast(snap.kf, np.maximum(hz, 0.0), np.arange(o + nk - 1, o + k))[0]
+                fac = np.ones(len(hseg)); fac[nk - 1:k] = np.exp(lr)
+                segs = hseg * fac
+            else:
+                segs = hseg * snap.ratio[o:o + len(pdist) - 1]
             frac = (pdist[nk] - along) / max(pdist[nk] - pdist[nk - 1], 1.0)
             rem = segs[nk - 1] * min(max(frac, 0.0), 1.0) + float(segs[nk:k].sum())
             eta = max(t + rem, now)
@@ -426,6 +460,7 @@ class LiveState:
             d.update(now=datetime.fromtimestamp(s.now, IST).isoformat(timespec="seconds"),
                      obs_in_window=s.n_obs, city_ratio=round(s.city[0], 3), city_minutes=round(s.city[1]),
                      segments_with_own_obs=int((s.n_seg > 0).sum()),
+                     live_mode=self.mode,
                      live_vehicles=int(sum(len(v) for v in s.vehicles.values())),
                      ratio_p10_p50_p90=[round(float(x), 3) for x in np.percentile(s.ratio[s.n_seg > 0], [10, 50, 90])] if (s.n_seg > 0).any() else None)
         return d

@@ -1,0 +1,53 @@
+{
+ "version": "v2-d2d-1",
+ "source": "E:\\hackathon-work\\v2\\ml\\realized_val_snapshot.csv",
+ "p50_col": "a3_p50_s",
+ "p85_col": "a3_p85_s",
+ "n": {
+  "<10|offpeak": 700,
+  "10-30|offpeak": 700,
+  "30-60|offpeak": 700,
+  ">60|offpeak": 1248,
+  "<10|peak": 1035,
+  "10-30|peak": 1035,
+  "30-60|peak": 1035,
+  ">60|peak": 1035
+ },
+ "shifts": {
+  "<10|offpeak": 0.67512,
+  "10-30|offpeak": 0.67512,
+  "30-60|offpeak": 0.67512,
+  ">60|offpeak": 0.4777,
+  "<10|peak": 0.37676,
+  "10-30|peak": 0.37676,
+  "30-60|peak": 0.37676,
+  ">60|peak": 0.37676
+ },
+ "buckets_s": [
+  [
+   0,
+   600,
+   "<10"
+  ],
+  [
+   600,
+   1800,
+   "10-30"
+  ],
+  [
+   1800,
+   3600,
+   "30-60"
+  ],
+  [
+   3600,
+   1000000000000.0,
+   ">60"
+  ]
+ ],
+ "alpha": 0.85,
+ "min_cell": 500,
+ "peak": "weekday (not 2/20 Oct) depart 08-10:59, 17-20:59",
+ "serve": "P85_d2d = max(P50, P85 * exp(shift[bucket(P50)|peak])) (journey_band.journey_band)",
+ "a3_wait_k": 1.7
+}

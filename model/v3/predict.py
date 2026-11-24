@@ -16,6 +16,15 @@ How it works
 
 Environment: V3_MODE=xgb (final XGBoost, needs xgboost) | lgbm (default) | calib (bucket calibration only) | off (return base_median_s unchanged).
 Arguments base_median_s/base_mean_s/n_stops/dist_m are only used for that fallback; pass None if unknown.
+
+v2 time band (flag V2_BAND=1, default 0 = v1 behaviour; AGENTS.md T1.1/T1.2):
+    p50_s, p85_s = band(route_id, board_stop, alight_stop, depart_dt, base_median_s, base_mean_s)
+  p50_s = correct(...) (unchanged). p85_s = max(p50_s, base * exp(q85 + shift)), where q50/q85 come from the XGBoost
+  quantile model v2/xgb_quantile.json (reg:quantileerror, alpha [0.5, 0.85], same features/target) and the shift is
+  the out-of-fold conformal shift in v2/conformal_shifts.json keyed by bucket(base*exp(q50)) | peak.
+  Legs not in the v3 patterns: p85 = max(p50, base_median_s * exp(fallback_log_ratio[bucket|peak])).
+  With V2_BAND=0, band() returns (p50_s, None): the caller keeps its v1 p85.
+  Artifacts are read from V2_BAND_DIR, else MODEL_DIR\\v2 (if it has xgb_quantile.json), else model/v3/v2.
 depart_dt: naive datetime in IST (or tz-aware; converted to IST), or seconds since midnight IST (weekday assumed).
 """
 import json
@@ -30,6 +39,9 @@ MODE = os.environ.get("V3_MODE", "lgbm")
 IST = timezone(timedelta(hours=5, minutes=30))
 CLIP = (0.5, 2.5)
 _M = None
+V2_BAND = os.environ.get("V2_BAND", "0") == "1"
+HOLIDAYS = {(2026, 10, 2), (2026, 10, 20)}   # section 4: pooled with weekends; not peak
+_B = None
 
 
 class _Model:
@@ -168,6 +180,75 @@ def correct(route_id, board_stop, alight_stop, depart_dt, base_median_s=None, ba
     else:
         f = math.exp(m.tree_sum(x))
     return smed * min(max(f, CLIP[0]), CLIP[1])
+
+
+def _band_dir():
+    d = os.environ.get("V2_BAND_DIR")
+    if d:
+        return d
+    md = os.environ.get("MODEL_DIR")
+    if md and os.path.exists(os.path.join(md, "v2", "xgb_quantile.json")):
+        return os.path.join(md, "v2")
+    return os.path.join(HERE, "v2")
+
+
+class _Band:
+    def __init__(self, d=None):
+        import xgboost
+        d = d or _band_dir()
+        self.meta = json.load(open(os.path.join(d, "conformal_shifts.json")))
+        self.q = xgboost.Booster(); self.q.load_model(os.path.join(d, "xgb_quantile.json"))
+        self.q.set_param({"device": "cpu", "nthread": 1})   # trained on GPU; single-row CPU predict is much faster
+        self.buckets = self.meta["buckets_s"]
+        assert self.meta["features"] == _model().features, "quantile model feature order differs from the p50 model"
+
+    def bucket(self, sec):
+        for lo, hi, nm in self.buckets:
+            if lo <= sec < hi:
+                return nm
+        return self.buckets[-1][2]
+
+    def key(self, sec, peak):
+        return f"{self.bucket(sec)}|{'peak' if peak else 'offpeak'}"
+
+
+def _bandm():
+    global _B
+    if _B is None:
+        _B = _Band()
+    return _B
+
+
+def _is_peak(depart_dt):
+    """Section 4: weekdays (not holidays) 08:00-10:59 and 17:00-20:59."""
+    tsec, hour_f, dow = _time_parts(depart_dt)
+    if not isinstance(depart_dt, (int, float)):
+        d = depart_dt.astimezone(IST) if depart_dt.tzinfo is not None else depart_dt
+        if (d.year, d.month, d.day) in HOLIDAYS:
+            return False
+    return dow < 5 and (8 <= hour_f < 11 or 17 <= hour_f < 21)
+
+
+def band(route_id, board_stop, alight_stop, depart_dt, base_median_s=None, base_mean_s=None, n_stops=None, dist_m=None):
+    """(p50_s, p85_s) for one bus leg; p85_s is None when V2_BAND is off. p85_s >= p50_s always."""
+    p50 = correct(route_id, board_stop, alight_stop, depart_dt, base_median_s, base_mean_s, n_stops, dist_m)
+    if not V2_BAND or p50 is None:
+        return p50, None
+    b = _bandm(); m = _model()
+    pk = _is_peak(depart_dt)
+    loc = m.locate(route_id, board_stop, alight_stop)
+    if loc is None:
+        base = base_median_s if base_median_s else base_mean_s
+        if base is None:
+            return p50, None
+        lr = b.meta["fallback_log_ratio"][b.key(float(base), pk)]
+        return p50, max(p50, float(base) * math.exp(lr))
+    tsec, hour_f, dow = _time_parts(depart_dt)
+    x, smed, _ = m.features_for(*loc, tsec, hour_f, dow)
+    q50, q85 = (float(v) for v in b.q.inplace_predict(np.asarray([x], dtype=np.float32))[0])
+    sh = b.meta["shifts"][b.key(smed * math.exp(q50), pk)]
+    p85 = smed * min(math.exp(q85 + sh), 4.0)
+    return p50, max(p50, p85)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,140 @@
+{
+ "version": "v2-band-1",
+ "features": [
+  "log_base_med",
+  "skew",
+  "n_stops",
+  "log_dist",
+  "base_speed",
+  "hour_f",
+  "weekend",
+  "route_len_m",
+  "route_nstops",
+  "route_speed",
+  "log_route_obs",
+  "route_cov",
+  "route_skew",
+  "board_pos",
+  "b_lat",
+  "b_lon",
+  "a_lat",
+  "a_lon",
+  "fb_frac",
+  "mean_logn"
+ ],
+ "target": "log(actual_s / sum_of_segment_medians)",
+ "quantile_alpha": [
+  0.5,
+  0.85
+ ],
+ "quantile_rounds": 104,
+ "quantile_params": {
+  "objective": "reg:quantileerror",
+  "quantile_alpha": [
+   0.5,
+   0.85
+  ],
+  "device": "cuda",
+  "tree_method": "hist",
+  "eval_metric": "quantile",
+  "learning_rate": 0.05,
+  "max_depth": 8,
+  "min_child_weight": 100,
+  "subsample": 0.8,
+  "colsample_bytree": 0.8,
+  "reg_lambda": 10.0,
+  "seed": 0
+ },
+ "serve": "p85 = max(p50, base_med * exp(q85 + shift[bucket(base_med*exp(q50))|peak]))",
+ "buckets_s": [
+  [
+   0,
+   600,
+   "<10"
+  ],
+  [
+   600,
+   1800,
+   "10-30"
+  ],
+  [
+   1800,
+   3600,
+   "30-60"
+  ],
+  [
+   3600,
+   1000000000000.0,
+   ">60"
+  ]
+ ],
+ "peak": "weekday (not 2 or 20 Oct) and hour in [8,11) or [17,21)",
+ "holidays_oct": [
+  2,
+  20
+ ],
+ "min_cell": 500,
+ "alpha": 0.85,
+ "shifts": {
+  "<10|offpeak": 0.00294,
+  "10-30|offpeak": 0.00074,
+  "30-60|offpeak": -0.00403,
+  ">60|offpeak": -0.01254,
+  "<10|peak": 0.01926,
+  "10-30|peak": 0.02446,
+  "30-60|peak": 0.02592,
+  ">60|peak": 0.02369
+ },
+ "n": {
+  "<10|offpeak": 460346,
+  "10-30|offpeak": 293053,
+  "30-60|offpeak": 112841,
+  ">60|offpeak": 28896,
+  "<10|peak": 125414,
+  "10-30|peak": 108370,
+  "30-60|peak": 53665,
+  ">60|peak": 17415
+ },
+ "shifts_18": {
+  "<10|offpeak": 0.00556,
+  "10-30|offpeak": 0.00487,
+  "30-60|offpeak": 0.00181,
+  ">60|offpeak": -0.0087,
+  "<10|peak": 0.02096,
+  "10-30|peak": 0.02159,
+  "30-60|peak": 0.02326,
+  ">60|peak": 0.02422
+ },
+ "n_18": {
+  "<10|offpeak": 342978,
+  "10-30|offpeak": 223815,
+  "30-60|offpeak": 88166,
+  ">60|offpeak": 23082,
+  "<10|peak": 88439,
+  "10-30|peak": 79049,
+  "30-60|peak": 40633,
+  ">60|peak": 13838
+ },
+ "fallback_log_ratio": {
+  "<10|offpeak": 0.27854,
+  "10-30|offpeak": 0.23931,
+  "30-60|offpeak": 0.23297,
+  ">60|offpeak": 0.22083,
+  "<10|peak": 0.3235,
+  "10-30|peak": 0.29828,
+  "30-60|peak": 0.29207,
+  ">60|peak": 0.27355
+ },
+ "fallback_n": {
+  "<10|offpeak": 469363,
+  "10-30|offpeak": 296184,
+  "30-60|offpeak": 106012,
+  ">60|offpeak": 23577,
+  "<10|peak": 129353,
+  "10-30|peak": 111475,
+  "30-60|peak": 50629,
+  ">60|peak": 13407
+ },
+ "fallback": "legs not in v3 patterns: p85 = max(p50, base_median_s * exp(fallback_log_ratio[bucket(base)|peak]))",
+ "scores": "out-of-fold (A2): shifts from 4 models each trained on 3 of 4 six-day folds of days 1-24"
+}

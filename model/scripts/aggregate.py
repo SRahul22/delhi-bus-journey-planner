@@ -1,5 +1,7 @@
 """Aggregate per-day passing files into model tables.
 Usage: python aggregate.py <train_days comma> <holdout_days comma or -> <outdir>
+Env HOLIDAYS (v2 T0.4): comma list of October days treated as holidays and pooled with weekends
+(daytype label "weekend"), e.g. HOLIDAYS=02,20. Unset/empty = v1 behaviour (weekday/weekend by calendar only).
 """
 import sys, os, glob, json
 import numpy as np, pandas as pd
@@ -10,6 +12,7 @@ hold = [d for d in sys.argv[2].split(",") if d and d != "-"]
 OUT = sys.argv[3]
 os.makedirs(OUT, exist_ok=True)
 IST = 19800
+HOLIDAYS = sorted({int(x) for x in os.environ.get("HOLIDAYS", "").split(",") if x.strip()})
 
 pat = pd.read_csv(os.path.join(W, "route_patterns.csv"))
 dist_lookup = {(r, s): d for r, s, d in zip(pat.route_id, pat.stop_sequence, pat.dist_m)}
@@ -30,7 +33,7 @@ def load(days):
     df["dist"] = pk.reindex(pd.MultiIndex.from_arrays([df.route, df.seq])).to_numpy()
     lt = pd.to_datetime(df.t + IST, unit="s")
     df["hour"] = lt.dt.hour.astype(np.int8)
-    df["daytype"] = np.where(lt.dt.dayofweek >= 5, "weekend", "weekday")
+    df["daytype"] = np.where((lt.dt.dayofweek >= 5) | lt.dt.day.isin(HOLIDAYS), "weekend", "weekday")
     return df.sort_values(["trip", "seq"], kind="stable").reset_index(drop=True)
 
 def segments(df):
@@ -43,7 +46,7 @@ def segments(df):
     print("segment obs", len(s), "kept", int(good.sum()))
     return s[good]
 
-stats = {}
+stats = {"holidays_pooled_with_weekend": HOLIDAYS}
 if train:
     df = load(train)
     print("train passings", len(df))

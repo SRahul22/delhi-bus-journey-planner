@@ -26,6 +26,7 @@ if HERE not in sys.path:
 from feed import IST, DEFAULT_REPLAY, ReplayFeed  # noqa: E402
 from live_state import LiveState, sod  # noqa: E402
 from rt_model import RealtimeTravelTimeModel  # noqa: E402
+from live_api import LiveInterface  # noqa: E402
 
 WARMUP_S = 2700
 HORIZON_S = 5400  # use live ratios for departures up to 90 min after the live clock
@@ -59,10 +60,14 @@ class RealtimeService:
         p = copy.copy(self.planner)
         p.model = self.rt_model
         self.rt_planner = p
+        self.api = LiveInterface(self.live)   # contract 4: segment_state(), next_buses()
 
     def reload(self):
         import numpy as np
         self.live.hist = np.concatenate(self.planner.model.seg).astype(np.float32)
+        if self.live.kf is not None:
+            import kf as kfmod
+            self.live.kf.sigma = kfmod.seg_sigma(self.planner.model)
         self.live._obs_np = None
         self._rebuild()
 

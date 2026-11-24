@@ -84,6 +84,13 @@ python -m venv .venv
 `requirements.txt` pins `xgboost==2.1.4`. Without xgboost the planner still runs but skips the final XGBoost
 correction; `GET /health` shows which is active (`ride_correction`).
 
+Served defaults ("config C", since 2026-11-24): XGBoost ride correction only on bus legs of 60 min or more
+(`V3_MIN_RIDE_S=3600`) and pooled waits over parallel routes (`V2_WAIT=pooled`) from the stop-visits index
+`POOLED_INDEX` (default `E:\hackathon-work\v2\planner\pooled_index_visits_1-24.npz`, built by
+`planner/build_pooled_index.py --source visits --days 1-24`) plus `stop_headways_v2.csv`. Without these files the
+planner uses v1 waits. Roll back with `set V2_WAIT=v1` and `set V3_MIN_RIDE_S=0` before starting. `GET /health`
+shows the active values under `flags`.
+
 ### Inputs the planner needs
 
 | Input | Where | In git? | If missing |

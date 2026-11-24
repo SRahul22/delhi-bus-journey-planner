@@ -1,0 +1,43 @@
+{
+ "base_all": 12.423,
+ "base_21_24": 12.795,
+ "blend1200_all": 12.485,
+ "configs": [
+  {
+   "cfg": {
+    "learning_rate": 0.05,
+    "max_depth": 7,
+    "min_child_weight": 200
+   },
+   "best_rounds": 10,
+   "val_all": 12.752,
+   "val_21_24": 12.706,
+   "at100": 12.845,
+   "at500": 12.861
+  },
+  {
+   "cfg": {
+    "learning_rate": 0.05,
+    "max_depth": 9,
+    "min_child_weight": 100
+   },
+   "best_rounds": 10,
+   "val_all": 12.75,
+   "val_21_24": 12.695,
+   "at100": 12.855,
+   "at500": 12.904
+  },
+  {
+   "cfg": {
+    "learning_rate": 0.03,
+    "max_depth": 10,
+    "min_child_weight": 50
+   },
+   "best_rounds": 10,
+   "val_all": 12.763,
+   "val_21_24": 12.722,
+   "at100": 12.841,
+   "at500": 12.875
+  }
+ ]
+}

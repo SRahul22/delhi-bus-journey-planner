@@ -16,6 +16,7 @@ queries on that day.
 """
 import numpy as np
 
+import kf as kfmod
 from live_state import sod
 
 FULL_S = 1800
@@ -84,11 +85,15 @@ class RealtimeTravelTimeModel:
         segm = self.base.seg_mean[ri] if getattr(self.base, "mode", "") == "blend" and getattr(self.base, "seg_mean", None) is not None else None
         blend_s = getattr(self.base, "blend_s", 0)
         lr = s.logr[self.live.off[ri]:self.live.off[ri + 1]]
+        o = int(self.live.off[ri])
         t = t_sec
         tot = tot85 = 0.0
         for k in range(i, j):
             h = int(t // 3600) % 24
-            f = float(np.exp(lr[k] * self.weight(t - now)))
+            if s.kf is not None:   # V2_LIVE=kf: Kalman forecast at this segment's horizon
+                f = float(np.exp(kfmod.forecast(s.kf, t - now, o + k)[0]))
+            else:
+                f = float(np.exp(lr[k] * self.weight(t - now)))
             v = float((segm if segm is not None and tot >= blend_s else seg)[k, dt, h]) * f
             tot += v
             tot85 += float(p85[k, dt, h]) * f

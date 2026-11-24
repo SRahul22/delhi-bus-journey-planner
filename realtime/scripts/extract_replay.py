@@ -1,6 +1,6 @@
 """Extract a compact replay file of one day's GPS feed (runs on Windows, 1 process, read-only).
 Usage: python extract_replay.py DD [step_s=30] [h0=6] [h1=22]
-Output: E:\\hackathon-work\\realtime\\replay_DD.npz with arrays
+Output: $RT_OUT_DIR\\replay_DD.npz (default E:\\hackathon-work\\realtime; v2 uses E:\\hackathon-work\\v2\\realtime) with arrays
   ts (int64 unix UTC), veh (int32), route (int32 GTFS route_id), trip (int32), lat5/lng5 (int32 = deg*1e5),
   veh_names, trip_names (str)
 Keeps 1 ping per vehicle every >= step_s seconds (repeated/stale timestamps dropped), h0..h1 IST only.
@@ -46,7 +46,8 @@ o = np.argsort(arr["ts"], kind="stable")
 out = dict(ts=arr["ts"][o], veh=arr["veh"][o].astype(np.int32), route=arr["route"][o].astype(np.int32),
            trip=arr["trip"][o].astype(np.int32), lat5=arr["lat5"][o].astype(np.int32), lng5=arr["lng5"][o].astype(np.int32),
            veh_names=np.array(list(vidx), dtype=str), trip_names=np.array([str(x) for x in tidx], dtype=str))
-os.makedirs(r"E:\hackathon-work\realtime", exist_ok=True)
-fn = rf"E:\hackathon-work\realtime\replay_{DD}.npz"
+OUT = os.environ.get("RT_OUT_DIR", r"E:\hackathon-work\realtime")
+os.makedirs(OUT, exist_ok=True)
+fn = os.path.join(OUT, f"replay_{DD}.npz")
 np.savez_compressed(fn, **out)
 print("rows read", n, "kept", len(o), "veh", len(vidx), "trips", len(tidx), "MB", round(os.path.getsize(fn) / 1e6, 1), "s", round(time.time() - t00))

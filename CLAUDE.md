@@ -13,6 +13,10 @@ A Google-Maps-like API: given two locations and a departure time in Delhi, retur
 | Real-time layer (28 Oct replayed as a live feed) | `realtime/` | Done and integrated (`?realtime=1`) |
 | Evaluation: 60 ticket-based pairs, actual rides, Google Maps | `eval/` | Done |
 | **Final ML: XGBoost (GPU) ride-time correction** | `model/v3/` | **Done and used by the API by default** (`V3_MODE=xgb`; `off` disables). See `model/v3/XGB_FINAL.md` |
+| **v2 plan (stop visits, pooled waits, bands, live KF, admin, arrive_by)** | `planner/`, `eval/`, `model/`, `realtime/` | **Merged into main 2026-11-24 22:40.** "Config C" is the served default, see below |
+
+**Config C is live (default in code since 2026-11-24 ~22:45):** XGBoost ride correction only on bus legs whose planner ride estimate is >= 60 min (`V3_MIN_RIDE_S`, default 3600, `planner/router.py` `DEFAULT_V3_MIN_RIDE_S`) + pooled waits (`V2_WAIT`, default `pooled`, `planner/v2ext.py` `DEFAULT_WAIT` and `planner/ttmodel.py`) from the stop-visits index `E:\hackathon-work\v2\planner\pooled_index_visits_1-24.npz` (`POOLED_INDEX`, default in `planner/v2ext.py` `DEFAULT_INDEX`). Pooled mode also loads gap-based waits from `stop_headways_v2.csv` (`V2_HEADWAYS`, else `MODEL_DIR\v2\stop_headways_v2.csv`, else `E:\hackathon-work\v2\data\stop_headways_v2.csv`). These files are gitignored/outside the repo; if missing, the planner falls back to v1 waits. `V2_BAND`, `V2_LIVE` etc. stay off. Validation (days 19-24, common subset n=1,996): door-to-door median APE 24.4% vs 26.3% for the old defaults; still ~15 min optimistic. See `docs/results/integration/rerun_val_ABC.md`.
+**Rollback** (no code change): start the API with `set V2_WAIT=v1` and `set V3_MIN_RIDE_S=0` (old behaviour: v1 waits, XGBoost on every leg), or check out commit `84bcebe` (merge, before the default flip). `/health` → `flags` shows `V2_WAIT`, `V3_MIN_RIDE_S`, `POOLED_INDEX`.
 
 Key numbers:
 - 600k held-out rides: **final XGBoost 12.28% median APE, 69.0% within ±20%** (rides >1 h: 18.3% → 14.0%); blend 12.45%; GTFS schedule 32.5%.
@@ -22,7 +26,9 @@ Key numbers:
 
 ## Running the API
 - `planner\run.bat` (venv already created in `planner\.venv`; GTFS read from `E:\hackathon-data\gtfs`).
-- **The API is probably already running** with the XGBoost model, restarted detached at ~18:25 on port 8000 (log `E:\hackathon-work\api_server.log`). Check `curl http://127.0.0.1:8000/health` before starting another one.
+- **The API is probably already running** with config C, restarted detached at 2026-11-24 ~22:45 on port 8000 (log `E:\hackathon-work\api_server.log`). Check `curl http://127.0.0.1:8000/health` before starting another one.
+- Detached start (survives SSH drops): `E:\hackathon-project\planner\.venv\Scripts\python.exe E:\hackathon-work\launch.py E:\hackathon-work\api_server.log -m uvicorn app:app --app-dir E:\hackathon-project\planner --host 0.0.0.0 --port 8000`. To stop it: the uvicorn PID is in the log ("Started server process [PID]"); its parent is the `.venv\Scripts\python.exe` launcher (`Get-Process python` shows both, same start time). Stop both with Python `os.kill(pid, signal.SIGTERM)`. Startup takes ~20 s (pooled index is 338 MB).
+- Latency (2026-11-24, machine busy with other jobs): 50 random queries over HTTP, p50 ~700-860 ms, p95 ~950-1,250 ms; the old defaults measured the same or slower (p95 1,024-1,074 ms). Most of it is RAPTOR + the quiet-hour recomputation, not config C.
 - LAN access to port 8000 is blocked by the Windows firewall (we are not an admin). From another machine, use an SSH tunnel: `ssh -L 8000:127.0.0.1:8000 <user>@<windows-host>` and open http://localhost:8000. Use `127.0.0.1`, not `localhost`, as the target.
 
 ## Rules and gotchas

@@ -1,0 +1,14 @@
+{
+ "fitted_on": "2026-10-22",
+ "objective": "weighted MSE of segment log-ratio forecasts, horizons 0-60 min, snapshots every 10 min 07:00-21:00 (weights = min(hist,300)/60)",
+ "params": {
+  "tau_s": 3600.0,
+  "tau_c": 14400.0,
+  "q": 2e-06,
+  "P0": 0.09,
+  "Pc0": 0.04,
+  "rc_add": 0.04,
+  "step": 60.0
+ },
+ "best_wmse": 0.11707335136606414
+}

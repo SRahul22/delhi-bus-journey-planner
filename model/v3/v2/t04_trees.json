@@ -1,0 +1,56 @@
+{
+ "chosen_every10": {
+  "cfg": {
+   "objective": "reg:absoluteerror",
+   "device": "cuda",
+   "tree_method": "hist",
+   "eval_metric": "mae",
+   "subsample": 0.8,
+   "colsample_bytree": 0.8,
+   "reg_lambda": 10.0,
+   "seed": 0,
+   "learning_rate": 0.03,
+   "max_depth": 10,
+   "min_child_weight": 50
+  },
+  "rounds": 10,
+  "val": {
+   "median_ape": 13.457,
+   "within20": 65.35,
+   "bias_s": -34.6,
+   "n": 300000
+  }
+ },
+ "chosen_every100": {
+  "cfg": {
+   "objective": "reg:absoluteerror",
+   "device": "cuda",
+   "tree_method": "hist",
+   "eval_metric": "mae",
+   "subsample": 0.8,
+   "colsample_bytree": 0.8,
+   "reg_lambda": 10.0,
+   "seed": 0,
+   "learning_rate": 0.03,
+   "max_depth": 10,
+   "min_child_weight": 50
+  },
+  "rounds": 100,
+  "val": {
+   "median_ape": 13.762,
+   "within20": 64.55,
+   "bias_s": -17.3,
+   "n": 300000
+  }
+ },
+ "v1_served": {
+  "rounds": 100,
+  "note": "xgb_final.json: depth 10, lr 0.03, mcw 50, 100 rounds (grid every 100)"
+ },
+ "val_sum_median": {
+  "median_ape": 13.05,
+  "within20": 66.46,
+  "bias_s": -77.0,
+  "n": 300000
+ }
+}

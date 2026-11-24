@@ -7,6 +7,7 @@ Segment ride-time lookup order (per route segment, hour 0-23 IST, daytype weekda
      (factor fitted from observed/scheduled ratios when model tables exist, else a prior profile)
   4. distance / fallback speed
 Wait at a stop = min(headway/2, WAIT_CAP) from observed stop_headways.csv, else GTFS trips/hour.
+V2_WAIT=gaps (v2 T2.1): mean(H^2)/(2 mean(H)) from stop_headways_v2.csv (raw stop-visit gaps) where n >= 20.
 
 Everything is materialised into dense numpy arrays per route at load time, so the router
 does O(1) lookups:  seg[r]  float32 [nseg, 2, 24]   (daytype 0=weekday 1=weekend)
@@ -24,6 +25,7 @@ from paths import model_dir
 MODEL_DIR = model_dir()
 MIN_N = 3
 WAIT_CAP = 20 * 60
+V2_WAIT_MIN_N = int(os.environ.get("V2_WAIT_MIN_N", 20))  # min gaps per (stop, route, hour, daytype) cell for V2_WAIT=gaps
 NO_SERVICE_WAIT = 45 * 60  # wait if no trip in that hour at all (penalised, router may still use it)
 FALLBACK_SPEED = 15 / 3.6  # m/s
 
@@ -205,8 +207,29 @@ class TravelTimeModel:
             wait[m.pos.values, m.dt.values, m.hour.values] = vals
             n_obs_wait = len(m)
         self.stats["wait_cells_observed"] = n_obs_wait
+        # v2 T2.1 (V2_WAIT=gaps|pooled): expected wait of a random arrival from raw stop-visit gaps,
+        # mean(H^2) / (2 mean(H)), capped at WAIT_CAP, where the cell has n >= V2_WAIT_MIN_N gaps; else v1 value.
+        wait85 = (wait * 1.7).astype(np.float32)  # v1 fallback: fixed headway H gives uniform wait, p85 = 0.85 H = 1.7 x mean
+        self.wait_mode = os.environ.get("V2_WAIT", "pooled").lower()  # default pooled (config C); V2_WAIT=v1 rolls back
+        if self.wait_mode in ("gaps", "pooled"):
+            hw2 = os.environ.get("V2_HEADWAYS") or next((p for p in (os.path.join(self.model_dir, "v2", "stop_headways_v2.csv"),
+                                                                       r"E:\hackathon-work\v2\data\stop_headways_v2.csv") if os.path.exists(p)), None)
+            n_v2 = 0
+            if hw2 and os.path.exists(hw2):
+                h2 = pd.read_csv(hw2, dtype={"route_id": str, "stop_id": str})
+                h2 = h2[(h2.n >= V2_WAIT_MIN_N) & h2.hour.between(0, 23) & (h2.expected_wait_s > 0)]
+                h2["dt"] = (h2.daytype.astype(str).str.lower() == "weekend").astype(np.int8)
+                rid = np.array([r["route_id"] for r in routes])
+                key = pd.DataFrame(dict(pos=np.arange(nst), route_id=rid[SR], stop_id=stop_ids[SS]))
+                m = key.merge(h2, on=["route_id", "stop_id"])
+                wait[m.pos.values, m.dt.values, m.hour.values] = np.minimum(m.expected_wait_s.values, WAIT_CAP)
+                wait85[m.pos.values, m.dt.values, m.hour.values] = np.maximum(m.wait_p85_s.values, m.expected_wait_s.values)
+                n_v2 = len(m)
+            else:
+                print("V2_WAIT=%s but stop_headways_v2.csv not found; using v1 waits" % self.wait_mode)
+            self.stats["wait_cells_v2_gaps"] = n_v2
 
-        self.seg, self.p85, self.wait = [], [], []
+        self.seg, self.p85, self.wait, self.wait85 = [], [], [], []
         off = 0
         for ri, r in enumerate(routes):
             n = len(r["stops"]) - 1
@@ -214,6 +237,7 @@ class TravelTimeModel:
             self.p85.append(obs85[off:off + n])
             off += n
             self.wait.append(wait[stop_off[ri]:stop_off[ri + 1]])
+            self.wait85.append(wait85[stop_off[ri]:stop_off[ri + 1]])
         self._cum_cache = {}
         self.stats["factor_weekday"] = [round(float(x), 2) for x in self.factor[0]]
         self.stats["load_s"] = round(time.time() - t0, 2)
@@ -256,3 +280,7 @@ class TravelTimeModel:
 
     def wait_s(self, ri, i, t_sec, dt):
         return float(self.wait[ri][i, dt, int(t_sec // 3600) % 24])
+
+    def wait_p85_s(self, ri, i, t_sec, dt):
+        """85th percentile wait of a random arrival (V2_WAIT=gaps|pooled: from stop-visit gaps; else 1.7 x v1 wait, the fixed-headway value)."""
+        return float(self.wait85[ri][i, dt, int(t_sec // 3600) % 24])

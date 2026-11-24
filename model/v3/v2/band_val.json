@@ -1,0 +1,837 @@
+{
+ "t04": {
+  "chosen_every10": {
+   "cfg": {
+    "objective": "reg:absoluteerror",
+    "device": "cuda",
+    "tree_method": "hist",
+    "eval_metric": "mae",
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_lambda": 10.0,
+    "seed": 0,
+    "learning_rate": 0.03,
+    "max_depth": 10,
+    "min_child_weight": 50
+   },
+   "rounds": 10,
+   "val": {
+    "median_ape": 13.457,
+    "within20": 65.35,
+    "bias_s": -34.6,
+    "n": 300000
+   }
+  },
+  "chosen_every100": {
+   "cfg": {
+    "objective": "reg:absoluteerror",
+    "device": "cuda",
+    "tree_method": "hist",
+    "eval_metric": "mae",
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_lambda": 10.0,
+    "seed": 0,
+    "learning_rate": 0.03,
+    "max_depth": 10,
+    "min_child_weight": 50
+   },
+   "rounds": 100,
+   "val": {
+    "median_ape": 13.762,
+    "within20": 64.55,
+    "bias_s": -17.3,
+    "n": 300000
+   }
+  },
+  "v1_served": {
+   "rounds": 100,
+   "note": "xgb_final.json: depth 10, lr 0.03, mcw 50, 100 rounds (grid every 100)"
+  },
+  "val_sum_median": {
+   "median_ape": 13.05,
+   "within20": 66.46,
+   "bias_s": -77.0,
+   "n": 300000
+  }
+ },
+ "quantile_val_best_score": 0.087282194220694,
+ "val": {
+  "v1_sum_segment_p85 (p50=sum of medians)": {
+   "all": {
+    "n": 300000,
+    "coverage85": 86.03,
+    "under_p50": 44.89,
+    "width_med": 0.3255,
+    "pinball85_s": 79.6,
+    "p50_median_ape": 13.05
+   },
+   "actual <10|offpeak": {
+    "n": 115973,
+    "coverage85": 86.93,
+    "under_p50": 52.74,
+    "width_med": 0.2916,
+    "pinball85_s": 20.9,
+    "p50_median_ape": 13.607
+   },
+   "actual <10|peak": {
+    "n": 35545,
+    "coverage85": 88.6,
+    "under_p50": 52.87,
+    "width_med": 0.3139,
+    "pinball85_s": 22.5,
+    "p50_median_ape": 13.832
+   },
+   "actual <10": {
+    "n": 151518,
+    "coverage85": 87.32,
+    "under_p50": 52.77,
+    "width_med": 0.2968,
+    "pinball85_s": 21.3,
+    "p50_median_ape": 13.66
+   },
+   "pred <10": {
+    "n": 153278,
+    "coverage85": 83.12,
+    "under_p50": 47.01,
+    "width_med": 0.2967,
+    "pinball85_s": 34.1,
+    "p50_median_ape": 14.341
+   },
+   "actual 10-30|offpeak": {
+    "n": 69714,
+    "coverage85": 85.51,
+    "under_p50": 40.73,
+    "width_med": 0.3236,
+    "pinball85_s": 81.4,
+    "p50_median_ape": 12.067
+   },
+   "actual 10-30|peak": {
+    "n": 28658,
+    "coverage85": 87.72,
+    "under_p50": 40.04,
+    "width_med": 0.3544,
+    "pinball85_s": 81.8,
+    "p50_median_ape": 11.238
+   },
+   "actual 10-30": {
+    "n": 98372,
+    "coverage85": 86.15,
+    "under_p50": 40.53,
+    "width_med": 0.3324,
+    "pinball85_s": 81.5,
+    "p50_median_ape": 11.817
+   },
+   "pred 10-30": {
+    "n": 97504,
+    "coverage85": 87.77,
+    "under_p50": 42.45,
+    "width_med": 0.3319,
+    "pinball85_s": 92.3,
+    "p50_median_ape": 11.818
+   },
+   "actual 30-60|offpeak": {
+    "n": 24927,
+    "coverage85": 82.62,
+    "under_p50": 33.73,
+    "width_med": 0.3637,
+    "pinball85_s": 199.3,
+    "p50_median_ape": 13.979
+   },
+   "actual 30-60|peak": {
+    "n": 14015,
+    "coverage85": 85.43,
+    "under_p50": 30.41,
+    "width_med": 0.3847,
+    "pinball85_s": 185.9,
+    "p50_median_ape": 11.918
+   },
+   "actual 30-60": {
+    "n": 38942,
+    "coverage85": 83.63,
+    "under_p50": 32.54,
+    "width_med": 0.3721,
+    "pinball85_s": 194.5,
+    "p50_median_ape": 13.162
+   },
+   "pred 30-60": {
+    "n": 38398,
+    "coverage85": 90.94,
+    "under_p50": 42.69,
+    "width_med": 0.3732,
+    "pinball85_s": 170.5,
+    "p50_median_ape": 12.054
+   },
+   "actual >60|offpeak": {
+    "n": 6481,
+    "coverage85": 73.2,
+    "under_p50": 20.41,
+    "width_med": 0.4017,
+    "pinball85_s": 502.4,
+    "p50_median_ape": 18.172
+   },
+   "actual >60|peak": {
+    "n": 4687,
+    "coverage85": 79.6,
+    "under_p50": 17.99,
+    "width_med": 0.4101,
+    "pinball85_s": 385.8,
+    "p50_median_ape": 14.67
+   },
+   "actual >60": {
+    "n": 11168,
+    "coverage85": 75.89,
+    "under_p50": 19.39,
+    "width_med": 0.4053,
+    "pinball85_s": 453.4,
+    "p50_median_ape": 16.586
+   },
+   "pred >60": {
+    "n": 10820,
+    "coverage85": 94.18,
+    "under_p50": 44.64,
+    "width_med": 0.41,
+    "pinball85_s": 287.1,
+    "p50_median_ape": 12.381
+   },
+   "day 19": {
+    "n": 46988,
+    "coverage85": 90.0,
+    "under_p50": 53.27,
+    "width_med": 0.3356,
+    "pinball85_s": 80.2,
+    "p50_median_ape": 12.268
+   },
+   "day 20": {
+    "n": 44722,
+    "coverage85": 93.07,
+    "under_p50": 69.64,
+    "width_med": 0.3346,
+    "pinball85_s": 95.6,
+    "p50_median_ape": 15.92
+   },
+   "day 21": {
+    "n": 46272,
+    "coverage85": 87.9,
+    "under_p50": 43.41,
+    "width_med": 0.3335,
+    "pinball85_s": 84.7,
+    "p50_median_ape": 11.441
+   },
+   "day 22": {
+    "n": 53210,
+    "coverage85": 85.63,
+    "under_p50": 40.03,
+    "width_med": 0.3344,
+    "pinball85_s": 76.6,
+    "p50_median_ape": 12.289
+   },
+   "day 23": {
+    "n": 55244,
+    "coverage85": 85.22,
+    "under_p50": 38.57,
+    "width_med": 0.3265,
+    "pinball85_s": 68.2,
+    "p50_median_ape": 12.398
+   },
+   "day 24": {
+    "n": 53564,
+    "coverage85": 76.31,
+    "under_p50": 29.49,
+    "width_med": 0.2906,
+    "pinball85_s": 76.0,
+    "p50_median_ape": 14.789
+   },
+   "days 21-24": {
+    "n": 208290,
+    "coverage85": 83.63,
+    "under_p50": 37.68,
+    "width_med": 0.3213,
+    "pinball85_s": 76.0,
+    "p50_median_ape": 12.72
+   }
+  },
+  "quantile_raw (no shift)": {
+   "all": {
+    "n": 300000,
+    "coverage85": 84.88,
+    "under_p50": 53.99,
+    "width_med": 0.2449,
+    "pinball85_s": 75.8,
+    "p50_median_ape": 13.457
+   },
+   "actual <10|offpeak": {
+    "n": 115973,
+    "coverage85": 88.4,
+    "under_p50": 60.27,
+    "width_med": 0.2582,
+    "pinball85_s": 19.4,
+    "p50_median_ape": 14.452
+   },
+   "actual <10|peak": {
+    "n": 35545,
+    "coverage85": 90.87,
+    "under_p50": 60.81,
+    "width_med": 0.2984,
+    "pinball85_s": 21.3,
+    "p50_median_ape": 14.766
+   },
+   "actual <10": {
+    "n": 151518,
+    "coverage85": 88.98,
+    "under_p50": 60.39,
+    "width_med": 0.2674,
+    "pinball85_s": 19.8,
+    "p50_median_ape": 14.524
+   },
+   "pred <10": {
+    "n": 153278,
+    "coverage85": 84.41,
+    "under_p50": 54.4,
+    "width_med": 0.2681,
+    "pinball85_s": 33.7,
+    "p50_median_ape": 14.817
+   },
+   "actual 10-30|offpeak": {
+    "n": 69714,
+    "coverage85": 82.01,
+    "under_p50": 50.92,
+    "width_med": 0.2122,
+    "pinball85_s": 75.5,
+    "p50_median_ape": 12.357
+   },
+   "actual 10-30|peak": {
+    "n": 28658,
+    "coverage85": 86.63,
+    "under_p50": 51.63,
+    "width_med": 0.2543,
+    "pinball85_s": 74.4,
+    "p50_median_ape": 11.626
+   },
+   "actual 10-30": {
+    "n": 98372,
+    "coverage85": 83.35,
+    "under_p50": 51.12,
+    "width_med": 0.2243,
+    "pinball85_s": 75.2,
+    "p50_median_ape": 12.126
+   },
+   "pred 10-30": {
+    "n": 97504,
+    "coverage85": 84.59,
+    "under_p50": 52.91,
+    "width_med": 0.2222,
+    "pinball85_s": 89.8,
+    "p50_median_ape": 12.166
+   },
+   "actual 30-60|offpeak": {
+    "n": 24927,
+    "coverage85": 76.21,
+    "under_p50": 43.61,
+    "width_med": 0.2119,
+    "pinball85_s": 189.1,
+    "p50_median_ape": 13.602
+   },
+   "actual 30-60|peak": {
+    "n": 14015,
+    "coverage85": 81.74,
+    "under_p50": 43.62,
+    "width_med": 0.2438,
+    "pinball85_s": 170.8,
+    "p50_median_ape": 11.488
+   },
+   "actual 30-60": {
+    "n": 38942,
+    "coverage85": 78.2,
+    "under_p50": 43.61,
+    "width_med": 0.2242,
+    "pinball85_s": 182.5,
+    "p50_median_ape": 12.791
+   },
+   "pred 30-60": {
+    "n": 38398,
+    "coverage85": 86.43,
+    "under_p50": 54.37,
+    "width_med": 0.2256,
+    "pinball85_s": 159.4,
+    "p50_median_ape": 12.273
+   },
+   "actual >60|offpeak": {
+    "n": 6481,
+    "coverage85": 62.12,
+    "under_p50": 28.27,
+    "width_med": 0.219,
+    "pinball85_s": 529.2,
+    "p50_median_ape": 16.219
+   },
+   "actual >60|peak": {
+    "n": 4687,
+    "coverage85": 71.64,
+    "under_p50": 29.19,
+    "width_med": 0.2318,
+    "pinball85_s": 383.7,
+    "p50_median_ape": 12.635
+   },
+   "actual >60": {
+    "n": 11168,
+    "coverage85": 66.12,
+    "under_p50": 28.65,
+    "width_med": 0.2247,
+    "pinball85_s": 468.1,
+    "p50_median_ape": 14.765
+   },
+   "pred >60": {
+    "n": 10820,
+    "coverage85": 88.78,
+    "under_p50": 56.6,
+    "width_med": 0.2259,
+    "pinball85_s": 249.6,
+    "p50_median_ape": 12.654
+   },
+   "day 19": {
+    "n": 46988,
+    "coverage85": 89.54,
+    "under_p50": 62.66,
+    "width_med": 0.2501,
+    "pinball85_s": 72.0,
+    "p50_median_ape": 13.633
+   },
+   "day 20": {
+    "n": 44722,
+    "coverage85": 93.17,
+    "under_p50": 76.66,
+    "width_med": 0.2479,
+    "pinball85_s": 85.4,
+    "p50_median_ape": 18.967
+   },
+   "day 21": {
+    "n": 46272,
+    "coverage85": 86.75,
+    "under_p50": 54.18,
+    "width_med": 0.2459,
+    "pinball85_s": 80.1,
+    "p50_median_ape": 11.761
+   },
+   "day 22": {
+    "n": 53210,
+    "coverage85": 84.86,
+    "under_p50": 50.14,
+    "width_med": 0.2582,
+    "pinball85_s": 73.9,
+    "p50_median_ape": 12.305
+   },
+   "day 23": {
+    "n": 55244,
+    "coverage85": 84.43,
+    "under_p50": 48.54,
+    "width_med": 0.2521,
+    "pinball85_s": 64.8,
+    "p50_median_ape": 12.256
+   },
+   "day 24": {
+    "n": 53564,
+    "coverage85": 72.75,
+    "under_p50": 36.75,
+    "width_med": 0.2168,
+    "pinball85_s": 80.6,
+    "p50_median_ape": 13.708
+   },
+   "days 21-24": {
+    "n": 208290,
+    "coverage85": 82.05,
+    "under_p50": 47.17,
+    "width_med": 0.2431,
+    "pinball85_s": 74.6,
+    "p50_median_ape": 12.492
+   }
+  },
+  "quantile+shifts18 (clean)": {
+   "all": {
+    "n": 300000,
+    "coverage85": 85.61,
+    "under_p50": 53.99,
+    "width_med": 0.257,
+    "pinball85_s": 76.1,
+    "p50_median_ape": 13.457
+   },
+   "actual <10|offpeak": {
+    "n": 115973,
+    "coverage85": 88.8,
+    "under_p50": 60.27,
+    "width_med": 0.2652,
+    "pinball85_s": 19.5,
+    "p50_median_ape": 14.452
+   },
+   "actual <10|peak": {
+    "n": 35545,
+    "coverage85": 92.08,
+    "under_p50": 60.81,
+    "width_med": 0.3259,
+    "pinball85_s": 22.0,
+    "p50_median_ape": 14.766
+   },
+   "actual <10": {
+    "n": 151518,
+    "coverage85": 89.57,
+    "under_p50": 60.39,
+    "width_med": 0.2794,
+    "pinball85_s": 20.1,
+    "p50_median_ape": 14.524
+   },
+   "pred <10": {
+    "n": 153278,
+    "coverage85": 85.08,
+    "under_p50": 54.4,
+    "width_med": 0.2801,
+    "pinball85_s": 33.7,
+    "p50_median_ape": 14.817
+   },
+   "actual 10-30|offpeak": {
+    "n": 69714,
+    "coverage85": 82.54,
+    "under_p50": 50.92,
+    "width_med": 0.2181,
+    "pinball85_s": 75.6,
+    "p50_median_ape": 12.357
+   },
+   "actual 10-30|peak": {
+    "n": 28658,
+    "coverage85": 88.14,
+    "under_p50": 51.63,
+    "width_med": 0.2819,
+    "pinball85_s": 76.6,
+    "p50_median_ape": 11.626
+   },
+   "actual 10-30": {
+    "n": 98372,
+    "coverage85": 84.17,
+    "under_p50": 51.12,
+    "width_med": 0.2367,
+    "pinball85_s": 75.9,
+    "p50_median_ape": 12.126
+   },
+   "pred 10-30": {
+    "n": 97504,
+    "coverage85": 85.42,
+    "under_p50": 52.91,
+    "width_med": 0.2348,
+    "pinball85_s": 90.0,
+    "p50_median_ape": 12.166
+   },
+   "actual 30-60|offpeak": {
+    "n": 24927,
+    "coverage85": 76.54,
+    "under_p50": 43.61,
+    "width_med": 0.2141,
+    "pinball85_s": 187.9,
+    "p50_median_ape": 13.602
+   },
+   "actual 30-60|peak": {
+    "n": 14015,
+    "coverage85": 83.86,
+    "under_p50": 43.62,
+    "width_med": 0.2728,
+    "pinball85_s": 173.6,
+    "p50_median_ape": 11.488
+   },
+   "actual 30-60": {
+    "n": 38942,
+    "coverage85": 79.17,
+    "under_p50": 43.61,
+    "width_med": 0.2366,
+    "pinball85_s": 182.8,
+    "p50_median_ape": 12.791
+   },
+   "pred 30-60": {
+    "n": 38398,
+    "coverage85": 87.2,
+    "under_p50": 54.37,
+    "width_med": 0.2387,
+    "pinball85_s": 160.4,
+    "p50_median_ape": 12.273
+   },
+   "actual >60|offpeak": {
+    "n": 6481,
+    "coverage85": 61.44,
+    "under_p50": 28.27,
+    "width_med": 0.213,
+    "pinball85_s": 528.5,
+    "p50_median_ape": 16.219
+   },
+   "actual >60|peak": {
+    "n": 4687,
+    "coverage85": 74.53,
+    "under_p50": 29.19,
+    "width_med": 0.2617,
+    "pinball85_s": 377.6,
+    "p50_median_ape": 12.635
+   },
+   "actual >60": {
+    "n": 11168,
+    "coverage85": 66.93,
+    "under_p50": 28.65,
+    "width_med": 0.2352,
+    "pinball85_s": 465.2,
+    "p50_median_ape": 14.765
+   },
+   "pred >60": {
+    "n": 10820,
+    "coverage85": 89.12,
+    "under_p50": 56.6,
+    "width_med": 0.2345,
+    "pinball85_s": 252.4,
+    "p50_median_ape": 12.654
+   },
+   "day 19": {
+    "n": 46988,
+    "coverage85": 90.21,
+    "under_p50": 62.66,
+    "width_med": 0.2655,
+    "pinball85_s": 73.1,
+    "p50_median_ape": 13.633
+   },
+   "day 20": {
+    "n": 44722,
+    "coverage85": 93.33,
+    "under_p50": 76.66,
+    "width_med": 0.2524,
+    "pinball85_s": 85.5,
+    "p50_median_ape": 18.967
+   },
+   "day 21": {
+    "n": 46272,
+    "coverage85": 87.58,
+    "under_p50": 54.18,
+    "width_med": 0.261,
+    "pinball85_s": 80.5,
+    "p50_median_ape": 11.761
+   },
+   "day 22": {
+    "n": 53210,
+    "coverage85": 85.79,
+    "under_p50": 50.14,
+    "width_med": 0.2734,
+    "pinball85_s": 74.2,
+    "p50_median_ape": 12.305
+   },
+   "day 23": {
+    "n": 55244,
+    "coverage85": 85.49,
+    "under_p50": 48.54,
+    "width_med": 0.2681,
+    "pinball85_s": 65.0,
+    "p50_median_ape": 12.256
+   },
+   "day 24": {
+    "n": 53564,
+    "coverage85": 73.35,
+    "under_p50": 36.75,
+    "width_med": 0.2228,
+    "pinball85_s": 80.3,
+    "p50_median_ape": 13.708
+   },
+   "days 21-24": {
+    "n": 208290,
+    "coverage85": 82.91,
+    "under_p50": 47.17,
+    "width_med": 0.256,
+    "pinball85_s": 74.7,
+    "p50_median_ape": 12.492
+   }
+  },
+  "quantile+shifts24 (served shifts; fold 4 in calibration)": {
+   "all": {
+    "n": 300000,
+    "coverage85": 85.39,
+    "under_p50": 53.99,
+    "width_med": 0.2543,
+    "pinball85_s": 76.1,
+    "p50_median_ape": 13.457
+   },
+   "actual <10|offpeak": {
+    "n": 115973,
+    "coverage85": 88.61,
+    "under_p50": 60.27,
+    "width_med": 0.2618,
+    "pinball85_s": 19.5,
+    "p50_median_ape": 14.452
+   },
+   "actual <10|peak": {
+    "n": 35545,
+    "coverage85": 92.01,
+    "under_p50": 60.81,
+    "width_med": 0.324,
+    "pinball85_s": 22.0,
+    "p50_median_ape": 14.766
+   },
+   "actual <10": {
+    "n": 151518,
+    "coverage85": 89.41,
+    "under_p50": 60.39,
+    "width_med": 0.2764,
+    "pinball85_s": 20.1,
+    "p50_median_ape": 14.524
+   },
+   "pred <10": {
+    "n": 153278,
+    "coverage85": 84.9,
+    "under_p50": 54.4,
+    "width_med": 0.2771,
+    "pinball85_s": 33.7,
+    "p50_median_ape": 14.817
+   },
+   "actual 10-30|offpeak": {
+    "n": 69714,
+    "coverage85": 82.14,
+    "under_p50": 50.92,
+    "width_med": 0.2131,
+    "pinball85_s": 75.4,
+    "p50_median_ape": 12.357
+   },
+   "actual 10-30|peak": {
+    "n": 28658,
+    "coverage85": 88.31,
+    "under_p50": 51.63,
+    "width_med": 0.2851,
+    "pinball85_s": 77.0,
+    "p50_median_ape": 11.626
+   },
+   "actual 10-30": {
+    "n": 98372,
+    "coverage85": 83.94,
+    "under_p50": 51.12,
+    "width_med": 0.2345,
+    "pinball85_s": 75.8,
+    "p50_median_ape": 12.126
+   },
+   "pred 10-30": {
+    "n": 97504,
+    "coverage85": 85.18,
+    "under_p50": 52.91,
+    "width_med": 0.2326,
+    "pinball85_s": 90.1,
+    "p50_median_ape": 12.166
+   },
+   "actual 30-60|offpeak": {
+    "n": 24927,
+    "coverage85": 75.87,
+    "under_p50": 43.61,
+    "width_med": 0.2078,
+    "pinball85_s": 187.9,
+    "p50_median_ape": 13.602
+   },
+   "actual 30-60|peak": {
+    "n": 14015,
+    "coverage85": 84.1,
+    "under_p50": 43.62,
+    "width_med": 0.2758,
+    "pinball85_s": 173.8,
+    "p50_median_ape": 11.488
+   },
+   "actual 30-60": {
+    "n": 38942,
+    "coverage85": 78.84,
+    "under_p50": 43.61,
+    "width_med": 0.234,
+    "pinball85_s": 182.8,
+    "p50_median_ape": 12.791
+   },
+   "pred 30-60": {
+    "n": 38398,
+    "coverage85": 86.92,
+    "under_p50": 54.37,
+    "width_med": 0.2355,
+    "pinball85_s": 160.4,
+    "p50_median_ape": 12.273
+   },
+   "actual >60|offpeak": {
+    "n": 6481,
+    "coverage85": 60.92,
+    "under_p50": 28.27,
+    "width_med": 0.2078,
+    "pinball85_s": 532.5,
+    "p50_median_ape": 16.219
+   },
+   "actual >60|peak": {
+    "n": 4687,
+    "coverage85": 74.63,
+    "under_p50": 29.19,
+    "width_med": 0.262,
+    "pinball85_s": 376.3,
+    "p50_median_ape": 12.635
+   },
+   "actual >60": {
+    "n": 11168,
+    "coverage85": 66.67,
+    "under_p50": 28.65,
+    "width_med": 0.2325,
+    "pinball85_s": 467.0,
+    "p50_median_ape": 14.765
+   },
+   "pred >60": {
+    "n": 10820,
+    "coverage85": 88.92,
+    "under_p50": 56.6,
+    "width_med": 0.2317,
+    "pinball85_s": 252.1,
+    "p50_median_ape": 12.654
+   },
+   "day 19": {
+    "n": 46988,
+    "coverage85": 90.1,
+    "under_p50": 62.66,
+    "width_med": 0.2637,
+    "pinball85_s": 73.0,
+    "p50_median_ape": 13.633
+   },
+   "day 20": {
+    "n": 44722,
+    "coverage85": 93.22,
+    "under_p50": 76.66,
+    "width_med": 0.2478,
+    "pinball85_s": 84.9,
+    "p50_median_ape": 18.967
+   },
+   "day 21": {
+    "n": 46272,
+    "coverage85": 87.42,
+    "under_p50": 54.18,
+    "width_med": 0.2593,
+    "pinball85_s": 80.5,
+    "p50_median_ape": 11.761
+   },
+   "day 22": {
+    "n": 53210,
+    "coverage85": 85.63,
+    "under_p50": 50.14,
+    "width_med": 0.2716,
+    "pinball85_s": 74.3,
+    "p50_median_ape": 12.305
+   },
+   "day 23": {
+    "n": 55244,
+    "coverage85": 85.32,
+    "under_p50": 48.54,
+    "width_med": 0.2662,
+    "pinball85_s": 65.0,
+    "p50_median_ape": 12.256
+   },
+   "day 24": {
+    "n": 53564,
+    "coverage85": 72.83,
+    "under_p50": 36.75,
+    "width_med": 0.2187,
+    "pinball85_s": 81.1,
+    "p50_median_ape": 13.708
+   },
+   "days 21-24": {
+    "n": 208290,
+    "coverage85": 82.65,
+    "under_p50": 47.17,
+    "width_med": 0.2537,
+    "pinball85_s": 74.9,
+    "p50_median_ape": 12.492
+   }
+  }
+ }
+}
