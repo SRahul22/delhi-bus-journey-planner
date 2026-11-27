@@ -15,8 +15,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-W = Path(r"E:\hackathon-work")
-OUT = Path(os.environ.get("V2_EVAL_OUT", r"E:\hackathon-work\v2\eval"))
+W = Path(os.environ.get("WORK_DIR", r"E:\hackathon-work"))
+OUT = Path(os.environ.get("V2_EVAL_OUT") or W / "v2" / "eval")
 IST = 19800
 MIN_N = 3
 t0 = time.time()

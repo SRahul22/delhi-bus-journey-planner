@@ -16,7 +16,7 @@ H1 = int(sys.argv[4]) if len(sys.argv) > 4 else 22
 IST = timezone(timedelta(hours=5, minutes=30))
 day0 = int(datetime(2026, 10, int(DD), tzinfo=IST).timestamp())
 T0, T1 = day0 + H0 * 3600, day0 + H1 * 3600
-DB = rf"E:\hackathon-data\bus-gps\bus_movements_2026_10_{DD}.db"
+DB = os.path.join(os.environ.get("DATA_DIR", r"E:\hackathon-data"), "bus-gps", f"bus_movements_2026_10_{DD}.db")  # env DATA_DIR
 t00 = time.time()
 con = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
 last = {}; vidx = {}; tidx = {}
@@ -46,7 +46,7 @@ o = np.argsort(arr["ts"], kind="stable")
 out = dict(ts=arr["ts"][o], veh=arr["veh"][o].astype(np.int32), route=arr["route"][o].astype(np.int32),
            trip=arr["trip"][o].astype(np.int32), lat5=arr["lat5"][o].astype(np.int32), lng5=arr["lng5"][o].astype(np.int32),
            veh_names=np.array(list(vidx), dtype=str), trip_names=np.array([str(x) for x in tidx], dtype=str))
-OUT = os.environ.get("RT_OUT_DIR", r"E:\hackathon-work\realtime")
+OUT = os.environ.get("RT_OUT_DIR") or os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "realtime")
 os.makedirs(OUT, exist_ok=True)
 fn = os.path.join(OUT, f"replay_{DD}.npz")
 np.savez_compressed(fn, **out)

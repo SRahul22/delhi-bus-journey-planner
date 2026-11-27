@@ -39,8 +39,8 @@ import pandas as pd
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
-DATA = Path(os.environ.get("V2_DATA_DIR", r"E:\hackathon-work\v2\data"))
-OUT = Path(os.environ.get("V2_EVAL_OUT", r"E:\hackathon-work\v2\eval"))
+DATA = Path(os.environ.get("V2_DATA_DIR") or Path(os.environ.get("WORK_DIR", r"E:\hackathon-work")) / "v2" / "data")
+OUT = Path(os.environ.get("V2_EVAL_OUT") or Path(os.environ.get("WORK_DIR", r"E:\hackathon-work")) / "v2" / "eval")
 NET = os.environ.get("NET_PATH", r"E:\hackathon-project\planner\cache\network.pkl")
 os.environ.setdefault("MODEL_DIR", r"E:\hackathon-project\model")
 IST = timezone(timedelta(hours=5, minutes=30))

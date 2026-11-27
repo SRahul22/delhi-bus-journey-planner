@@ -12,7 +12,7 @@ import json, os, sys, time
 import numpy as np, pandas as pd
 import lightgbm as lgb
 
-D = r"E:\hackathon-work\v3"
+D = os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "v3")  # env WORK_DIR
 t0 = time.time()
 out_lines = []
 def P(*a):

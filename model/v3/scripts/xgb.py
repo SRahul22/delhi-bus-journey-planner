@@ -6,7 +6,7 @@ Number of rounds chosen by early stopping on fold 4 (days 19-24), never on the t
 import os, sys, time
 import numpy as np, pandas as pd, xgboost as xgb
 sys.argv = [sys.argv[0]]
-D = r"E:\hackathon-work\v3"
+D = os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "v3")  # env WORK_DIR
 t0 = time.time()
 tr = pd.concat([pd.read_parquet(os.path.join(D, f"fold{i}.parquet")).assign(fold=i) for i in range(1, 5)], ignore_index=True)
 te = pd.read_parquet(os.path.join(D, "test.parquet"))

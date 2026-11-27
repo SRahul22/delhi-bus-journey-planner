@@ -7,7 +7,7 @@ Usable share per route that day: us_route int32, us_matched int32 (map-matched t
 """
 import sys, os, time
 import numpy as np, pandas as pd
-W = r"E:\hackathon-work"; OUT = os.path.join(W, "v2", "data")
+W = os.environ.get("WORK_DIR", r"E:\hackathon-work"); OUT = os.path.join(W, "v2", "data"); os.makedirs(OUT, exist_ok=True)
 for DD in sys.argv[1].split(","):
     t0 = time.time()
     z = np.load(os.path.join(W, "pass", f"pass_{DD}.npz"))

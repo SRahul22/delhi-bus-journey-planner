@@ -27,8 +27,8 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import metrics as M  # noqa: E402
 
-W = Path(r"E:\hackathon-work")
-OUT = Path(os.environ.get("V2_EVAL_OUT", r"E:\hackathon-work\v2\eval"))
+W = Path(os.environ.get("WORK_DIR", r"E:\hackathon-work"))
+OUT = Path(os.environ.get("V2_EVAL_OUT") or W / "v2" / "eval")
 IST = 19800
 DAYS = {"test": range(25, 32), "val": range(19, 25)}
 RIDES = {"test": W / "v3" / "test.parquet", "val": W / "v3" / "fold4.parquet"}

@@ -41,7 +41,7 @@ from rt_model import RealtimeTravelTimeModel  # noqa: E402
 from ttmodel import TravelTimeModel  # noqa: E402
 from paths import gtfs_dir  # noqa: E402
 
-OUT = os.environ.get("RT_V2_OUT", r"E:\hackathon-work\v2\realtime")
+OUT = os.environ.get("RT_V2_OUT") or os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "v2", "realtime")
 H_BUCKETS = [0, 300, 600, 1200, 1800, 3600]          # next-bus ETA buckets for sd_s (s)
 SEG_HB = [0, 600, 1200, 1800, 2700, 3600]           # segment-forecast horizon buckets (s)
 GRID = dict(tau_s=[300, 900, 1800, 3600], tau_c=[1800, 3600, 7200, 14400], q=[2e-6, 2e-5, 1e-4])
@@ -105,7 +105,7 @@ def main():
     rng = np.random.default_rng(0)
     net = pickle.load(open(find(os.environ.get("RT_NETWORK"), os.path.join(REPO, "planner", "cache", "network.pkl"),
                                 os.path.join(OUT, "network.pkl")), "rb"))
-    replay = find(os.path.join(OUT, f"replay_{DD}.npz"), rf"E:\hackathon-work\realtime\replay_{DD}.npz")
+    replay = find(os.path.join(OUT, f"replay_{DD}.npz"), os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "realtime", f"replay_{DD}.npz"))
     base = TravelTimeModel(net)
     ls = LiveState(net, base, mode="ratio")
     ls.keep_history = True

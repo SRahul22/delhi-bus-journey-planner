@@ -5,5 +5,5 @@ env = dict(os.environ, HOLIDAYS=os.environ.get("HOLIDAYS", "02,20"))
 for name, last in (("tables_1_18", 18), ("tables_1_24", 24)):
     days = ",".join(f"{d:02d}" for d in range(1, last + 1))
     print(time.strftime("%H:%M:%S"), "start", name, flush=True)
-    rc = subprocess.call([sys.executable, os.path.join(HERE, "aggregate.py"), days, "-", os.path.join(r"E:\hackathon-work\v2\data", name)], env=env)
+    rc = subprocess.call([sys.executable, os.path.join(HERE, "aggregate.py"), days, "-", os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "v2", "data", name)], env=env)
     print(time.strftime("%H:%M:%S"), "end", name, "rc", rc, flush=True)

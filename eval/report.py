@@ -32,7 +32,7 @@ sys.path.insert(0, str(HERE))
 import metrics as M  # noqa: E402
 import ride_baselines as RB  # noqa: E402
 
-OUT = Path(os.environ.get("V2_EVAL_OUT", r"E:\hackathon-work\v2\eval"))
+OUT = Path(os.environ.get("V2_EVAL_OUT") or Path(os.environ.get("WORK_DIR", r"E:\hackathon-work")) / "v2" / "eval")
 t0 = time.time()
 
 

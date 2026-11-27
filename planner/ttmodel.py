@@ -35,7 +35,7 @@ DEFAULT_V2_WAIT = "gaps"  # config F (docs/handoff/v2-waits.md); keep in sync wi
 # knob defaults per wait mode: gaps = config F; pooled / v1 = the values before v2/waits (config C / v1)
 WAIT_KNOBS_F = dict(V2_WAIT_MIN_N="3", V2_WAIT_CAP="3600", V2_WAIT_FILL="1", V2_WAIT_UNOBS="1")
 WAIT_KNOBS_OLD = dict(V2_WAIT_MIN_N="20", V2_WAIT_CAP=str(WAIT_CAP), V2_WAIT_FILL="0", V2_WAIT_UNOBS="0")
-DEFAULT_V2_HEADWAYS = r"E:\hackathon-work\v2\data\stop_headways_v2.csv"  # gap table, days 1-24
+DEFAULT_V2_HEADWAYS = os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "v2", "data", "stop_headways_v2.csv")  # serving table, days 1-24; env V2_HEADWAYS or WORK_DIR
 
 
 def v2_wait_mode():

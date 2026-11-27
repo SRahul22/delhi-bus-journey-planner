@@ -2,7 +2,7 @@
 import sys, subprocess, time, os
 N = int(sys.argv[1]); days = sys.argv[2].split(",")
 HERE = os.path.dirname(os.path.abspath(__file__))
-LOGD = r"E:\hackathon-work\v2\data\logs"; os.makedirs(LOGD, exist_ok=True)
+LOGD = os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "v2", "data", "logs"); os.makedirs(LOGD, exist_ok=True)
 running = []
 while days or running:
     while days and len(running) < N:

@@ -1,4 +1,4 @@
-holdout rows: 20000  (<repo>/model/holdout_trips.csv)
+holdout rows: 20000  (~/hackathon/model/holdout_trips.csv)
 coverage (route+stops found in canonical pattern): 100.0%
 model    : {'n': 20000, 'median_ape_pct': 12.8, 'mean_ape_pct': 18.4, 'within_20pct': 67.8, 'median_bias_s': -18.9, 'mae_s': 185.5}
 schedule : {'n': 20000, 'median_ape_pct': 32.5, 'mean_ape_pct': 42.4, 'within_20pct': 32.6, 'median_bias_s': 62.5, 'mae_s': 324.4}

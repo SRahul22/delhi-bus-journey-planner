@@ -13,7 +13,7 @@ import argparse, difflib, math, os, re, collections
 import numpy as np, pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-GTFS = os.path.join(HERE, "..", "data", "gtfs")
+GTFS = os.environ.get("GTFS_DIR") or next((p for p in (os.path.join(HERE, "..", "data", "gtfs"), os.path.join(os.environ.get("DATA_DIR", r"E:\hackathon-data"), "gtfs")) if os.path.exists(os.path.join(p, "stops.txt"))), os.path.join(HERE, "..", "data", "gtfs"))
 CP = (28.6315, 77.2167)  # Connaught Place
 DATE = "2026-10-28"      # Wednesday in the held-out week (25-31 Oct)
 SLOTS = {"am_peak": ("09:00", range(7, 11)), "offpeak": ("13:00", range(11, 16)), "pm_peak": ("18:30", range(17, 21))}

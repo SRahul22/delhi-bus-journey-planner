@@ -35,7 +35,7 @@ VAR_FLOOR = 0.005
 
 def _load_sd(path=None):
     for cand in (path, os.environ.get("NEXT_BUS_SD"), os.path.join(HERE, "next_bus_sd.json"),
-                 r"E:\hackathon-work\v2\realtime\next_bus_sd.json"):
+                 os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "v2", "realtime", "next_bus_sd.json")):
         if cand and os.path.exists(cand):
             with open(cand) as f:
                 return json.load(f)

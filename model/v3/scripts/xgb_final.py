@@ -11,14 +11,16 @@ Run on Windows (detached, survives SSH drops):
   python E:\\hackathon-work\\launch.py E:\\hackathon-work\\v3\\xgb_final_log.txt E:\\hackathon-project\\model\\v3\\scripts\\xgb_final.py
 Needs xgboost==2.1.4 (3.x cannot see this driver and silently runs on CPU).
 Outputs (E:\\hackathon-project\\model\\v3): xgb_final.json (model), xgb_final_meta.json (features, config, metrics),
-XGB_FINAL.md (results). Then commits them to git.
+XGB_FINAL.md (results). With XGB_FINAL_COMMIT=1 it then commits them to git (the original run did).
+Env: WORK_DIR (default E:\\hackathon-work; reads WORK_DIR/v3/fold1..4.parquet, test.parquet), XGB_DEVICE (default cuda; cpu without an NVIDIA GPU).
 """
 import json, os, subprocess, sys, time
 import numpy as np, pandas as pd, xgboost as xgb
 
-D = r"E:\hackathon-work\v3"
-OUT = r"E:\hackathon-project\model\v3"
-REPO = r"E:\hackathon-project"
+D = os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "v3")  # env WORK_DIR
+REPO = os.environ.get("REPO_DIR", os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+OUT = os.path.join(REPO, "model", "v3")
+DEVICE = os.environ.get("XGB_DEVICE", "cuda")  # "cpu" on machines without an NVIDIA GPU (results may differ slightly)
 t0 = time.time()
 log = lambda *a: print(f"[{time.time()-t0:6.0f}s]", *a, flush=True)
 log("xgboost", xgb.__version__)
@@ -52,7 +54,7 @@ def metrics(p, act):
     return dict(median_ape=round(100 * float(np.median(ape)), 2), mean_ape=round(100 * float(np.mean(ape)), 2),
                 within20=round(100 * float(np.mean(ape < 0.2)), 1), bias_s=round(float(np.mean(e)), 0), n=int(len(act)))
 
-base_cfg = dict(objective="reg:absoluteerror", device="cuda", tree_method="hist", eval_metric="mae",
+base_cfg = dict(objective="reg:absoluteerror", device=DEVICE, tree_method="hist", eval_metric="mae",
                 subsample=0.8, colsample_bytree=0.8, reg_lambda=10.0)
 grid = [dict(learning_rate=0.05, max_depth=7, min_child_weight=200),
         dict(learning_rate=0.05, max_depth=9, min_child_weight=100),
@@ -113,11 +115,14 @@ L += ["", "Feature importance (gain %): " + ", ".join(f"{k} {v}" for k, v in lis
 open(os.path.join(OUT, "XGB_FINAL.md"), "w", encoding="utf-8").write("\n".join(L) + "\n")
 log("wrote", OUT)
 
-try:
+if os.environ.get("XGB_FINAL_COMMIT", "0") != "1":
+    log("not committing (set XGB_FINAL_COMMIT=1 to git-commit the outputs as the original run did)")
+else:
+  try:
     subprocess.run(["git", "-C", REPO, "add", "model/v3/xgb_final.json", "model/v3/xgb_final_meta.json", "model/v3/XGB_FINAL.md"], check=True)
     subprocess.run(["git", "-C", REPO, "commit", "-q", "-m", "v3: final XGBoost model (train 1-18, val 19-24, refit 1-24, test 25-31)",
                     "-m", "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"], check=True)
     log("committed")
-except Exception as e:
+  except Exception as e:
     log("git commit failed:", e)
 log("DONE")

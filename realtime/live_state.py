@@ -116,11 +116,12 @@ class LiveState:
         self.window = window
         shapes_csv = _first_existing(shapes_csv, os.environ.get("ROUTE_SHAPES"),
                                      os.path.join(REPO, "model", "work", "route_shapes.csv"),
-                                     "E:/hackathon-work/route_shapes.csv")
+                                     os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "route_shapes.csv"))
         patterns_csv = _first_existing(patterns_csv, os.path.join(os.environ.get("MODEL_DIR", ""), "route_patterns.csv"),
                                        os.path.join(REPO, "model", "route_patterns.csv"))
-        routes_txt = _first_existing(routes_txt, os.path.join(REPO, "data", "gtfs", "routes.txt"),
-                                     "E:/hackathon-data/gtfs/routes.txt")
+        routes_txt = _first_existing(routes_txt, os.path.join(os.environ["GTFS_DIR"], "routes.txt") if os.environ.get("GTFS_DIR") else None,
+                                     os.path.join(REPO, "data", "gtfs", "routes.txt"),
+                                     os.path.join(os.environ.get("DATA_DIR", r"E:\hackathon-data"), "gtfs", "routes.txt"))
         routes = net["routes"]
         stop_ids = net["stops"].stop_id.astype(str).to_numpy()
         self.ri_of = {}

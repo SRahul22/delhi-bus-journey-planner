@@ -3,7 +3,10 @@
 Deterministic statistical model: historical stop-to-stop travel times per route, hour of day and day type,
 plus observed headways. No ML.
 
-## Outputs (in `model/`, small; copied from `E:\hackathon-work\out_train` and `out_hold`)
+## Outputs (in `model/`, small; copied from `E:\hackathon-work\out_train2` and `out_hold`)
+
+`out_train2` is the second 1–24 aggregation (with the `mean_s` column); the older `out_train` lacks it. Portable
+commands for Linux/macOS/Windows: [`../REPRODUCE.md`](../REPRODUCE.md).
 
 | file | columns | notes |
 |---|---|---|
@@ -51,7 +54,7 @@ plus observed headways. No ML.
    Headways from consecutive passings at a (route, stop) on the same day by different vehicles.
    Holdout: one random (board<alight) pair per trip of days 25–31, speed <= 70 km/h, first 20k.
 
-## How to run (Windows, from Mac via the SSH master)
+## How to run (historical: Windows, from the retired Mac via the SSH master; see ../REPRODUCE.md for the current steps)
 
 ```
 S="ssh -o ControlPath=~/.ssh/cm-%r@%h:%p -o BatchMode=yes -o LogLevel=ERROR <user>@<windows-host>"
@@ -61,9 +64,9 @@ scp $O model/work/route_shapes.csv model/route_patterns.csv data/gtfs/routes.txt
 # all days, 10 in parallel, detached (survives SSH drop; launch.py uses DETACHED_PROCESS + job breakaway):
 $S "cd /d E:\hackathon-work && python launch.py E:\hackathon-work\run_all.log run_all.py 10 01,02,...,31"
 # (skips days whose pass_DD.npz exists; per-day logs in E:\hackathon-work\log_DD.txt)
-$S "cd /d E:\hackathon-work && python aggregate.py 01,02,...,24 - E:\hackathon-work\out_train"
+$S "cd /d E:\hackathon-work && python aggregate.py 01,02,...,24 - E:\hackathon-work\out_train2"
 $S "cd /d E:\hackathon-work && python aggregate.py \"\" 25,26,27,28,29,30,31 E:\hackathon-work\out_hold"
-scp $O "<user>@<windows-host>:E:/hackathon-work/out_train/*" model/
+scp $O "<user>@<windows-host>:E:/hackathon-work/out_train2/*" model/
 ```
 Remote needs `pip install --user numpy pandas` (done). `scripts/diag.py` is a one-off diagnostic (which
 route shape a GPS trip fits best), not part of the pipeline.

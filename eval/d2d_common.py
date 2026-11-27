@@ -1,5 +1,6 @@
 """Shared helpers for the d2d floor / bias / live analysis (eval/d2d_oracle.py, d2d_calib.py, d2d_live.py)."""
 import json
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -12,7 +13,7 @@ sys.path.insert(0, str(HERE))
 import metrics as M  # noqa: E402
 import realized_journeys as RJ  # noqa: E402
 
-W = Path(r"E:\hackathon-work\v2")
+W = Path(os.environ.get("WORK_DIR", r"E:\hackathon-work")) / "v2"
 OUT = W / "analysis"
 CFG = dict(A=W / "eval" / "realized_val.csv", B=W / "rerun" / "B" / "realized_val.csv",
            C=W / "rerun" / "C" / "realized_val.csv", C24=W / "rerun" / "C24" / "realized_val.csv")

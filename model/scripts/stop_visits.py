@@ -15,10 +15,10 @@ from scipy.spatial import cKDTree
 
 DD = sys.argv[1]
 LIMIT = int(sys.argv[2]) if len(sys.argv) > 2 else 0
-DB = rf"E:\hackathon-data\bus-gps\bus_movements_2026_10_{DD}.db"
-GTFS = os.environ.get("GTFS_DIR", r"E:\hackathon-data\gtfs")
-PAT = r"E:\hackathon-work\route_patterns.csv"
-OUT = r"E:\hackathon-work\v2\data"
+DB = os.path.join(os.environ.get("DATA_DIR", r"E:\hackathon-data"), "bus-gps", f"bus_movements_2026_10_{DD}.db")  # env DATA_DIR
+GTFS = os.environ.get("GTFS_DIR") or os.path.join(os.environ.get("DATA_DIR", r"E:\hackathon-data"), "gtfs")
+PAT = os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "route_patterns.csv")  # env WORK_DIR
+OUT = os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "v2", "data"); os.makedirs(OUT, exist_ok=True)
 RADIUS = 60.0
 STEP = 40.0
 DENSIFY = os.environ.get("VISITS_DENSIFY", "1") == "1"

@@ -17,7 +17,7 @@ Output: <out_prefix>.parquet (one row per ride) + <out_prefix>_log.txt
 import sys, os, time, json
 import numpy as np, pandas as pd
 
-W = r"E:\hackathon-work"
+W = os.environ.get("WORK_DIR", r"E:\hackathon-work")  # env WORK_DIR
 OUTD = os.path.join(W, "v3")
 IST = 19800
 MIN_N = 3
@@ -126,7 +126,7 @@ route_feat["route_skew"] = np.where(rm > 0, rs / np.maximum(rm, 1e-6), np.nan)
 del s
 
 if EXPORT:
-    stops_ = pd.read_csv(r"E:\hackathon-data\gtfs\stops.txt", usecols=["stop_id", "stop_lat", "stop_lon"])
+    stops_ = pd.read_csv(os.path.join(os.environ.get("GTFS_DIR") or os.path.join(os.environ.get("DATA_DIR", r"E:\hackathon-data"), "gtfs"), "stops.txt"), usecols=["stop_id", "stop_lat", "stop_lon"])
     stops_ = stops_[stops_.stop_id.isin(pat.stop_id)]
     rf = route_feat.drop(columns="route_id")
     # everything predict.py needs, one file (median/mean already have the n<3 fallbacks filled in)
@@ -190,7 +190,7 @@ R["base_med"] = smed; R["base_mean"] = smean; R["base_p85"] = sp85; R["base_blen
 R["fb_frac"] = nfb / steps; R["mean_logn"] = slogn / steps
 R = R.merge(route_feat, on="route_id", how="left")
 R["board_pos"] = R.board_seq / (R.route_nstops - 1)
-stops = pd.read_csv(r"E:\hackathon-data\gtfs\stops.txt", usecols=["stop_id", "stop_lat", "stop_lon"])
+stops = pd.read_csv(os.path.join(os.environ.get("GTFS_DIR") or os.path.join(os.environ.get("DATA_DIR", r"E:\hackathon-data"), "gtfs"), "stops.txt"), usecols=["stop_id", "stop_lat", "stop_lon"])
 ll = stops.set_index("stop_id")
 R["b_lat"] = ll.stop_lat.reindex(R.board_stop).to_numpy(); R["b_lon"] = ll.stop_lon.reindex(R.board_stop).to_numpy()
 R["a_lat"] = ll.stop_lat.reindex(R.alight_stop).to_numpy(); R["a_lon"] = ll.stop_lon.reindex(R.alight_stop).to_numpy()

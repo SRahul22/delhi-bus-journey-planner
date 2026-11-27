@@ -6,7 +6,7 @@ Env HOLIDAYS (v2 T0.4): comma list of October days treated as holidays and poole
 import sys, os, glob, json
 import numpy as np, pandas as pd
 
-W = r"E:\hackathon-work"
+W = os.environ.get("WORK_DIR", r"E:\hackathon-work")  # env WORK_DIR: route_patterns.csv and pass/pass_DD.npz
 train = [d for d in sys.argv[1].split(",") if d]
 hold = [d for d in sys.argv[2].split(",") if d and d != "-"]
 OUT = sys.argv[3]

@@ -34,8 +34,8 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import metrics as M  # noqa: E402
 
-V3 = Path(r"E:\hackathon-work\v3")
-OUT = Path(os.environ.get("V2_EVAL_OUT", r"E:\hackathon-work\v2\eval"))
+V3 = Path(os.environ.get("WORK_DIR", r"E:\hackathon-work")) / "v3"
+OUT = Path(os.environ.get("V2_EVAL_OUT") or Path(os.environ.get("WORK_DIR", r"E:\hackathon-work")) / "v2" / "eval")
 MODEL_DIR = Path(os.environ.get("MODEL_DIR", r"E:\hackathon-project\model"))
 NET = Path(os.environ.get("NET_PATH", r"E:\hackathon-project\planner\cache\network.pkl"))
 HOLIDAYS = {2, 20}  # October 2026 day-of-month; Gandhi Jayanti, Dussehra (AGENTS.md section 4)
@@ -135,7 +135,7 @@ def compute(which: str, with_xgb: bool = True):
     p85 = {band_name: R.base_p85.to_numpy()}
     bands = [band_name]
     # ml agent's validation predictions (1-18 models), row-aligned with fold4.parquet; used only if they line up
-    mlf = Path(os.environ.get("V2_ML_DIR", r"E:\hackathon-work\v2\ml")) / "band_val_preds.parquet"
+    mlf = Path(os.environ.get("V2_ML_DIR") or Path(os.environ.get("WORK_DIR", r"E:\hackathon-work")) / "v2" / "ml") / "band_val_preds.parquet"
     if which == "val" and mlf.exists():
         B = pd.read_parquet(mlf)
         if len(B) == len(R) and np.allclose(B.actual_s, R.actual_s) and np.allclose(B.base_med, R.base_med):

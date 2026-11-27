@@ -2,9 +2,26 @@
 
 Google-Maps-style API: give two locations and a departure time, get bus journey options with estimated travel times. Travel times come from a traffic model built from October 2026 DTC bus GPS data.
 
+## Submission at a glance
+
+- **What it is:** a travel-time API and interactive Leaflet map for Delhi buses. It takes coordinates or stop names and a departure time and returns up to 3 journey options with door-to-door times and a heavy-traffic range. It is built from 31 days of DTC bus GPS plus the Delhi GTFS.
+- **Results** (held-out data; details in [`ARCHITECTURE_AND_BENCHMARK.md`](ARCHITECTURE_AND_BENCHMARK.md)):
+  - Ride time: 12.6% median error vs 32.5% for the GTFS timetable.
+  - Popular ticketed trips: 6.0% vs actual GPS rides.
+  - Door-to-door (wait + ride + transfers): 18.8% on the test week, against a 16.4% limit for a perfect historical model.
+  - Against actual bus rides, our estimates are 6.4% off and Google Maps (bus only) 16.3%.
+- **Read next:** [`ARCHITECTURE_AND_BENCHMARK.md`](ARCHITECTURE_AND_BENCHMARK.md) (how it works and full benchmark), [`REPRODUCE.md`](REPRODUCE.md) (run or rebuild everything), [`AI_USE.md`](AI_USE.md) (use of AI), [`docs/LOG.md`](docs/LOG.md) (decision log).
+- **Run the API and map:** `planner/run.sh` (Linux/macOS) or `planner\run.bat` (Windows), then open http://localhost:8000. See "Run the planner" below and `REPRODUCE.md` for the data the planner needs.
+- **Note:** `docs/report/report.pdf` is the earlier 8-page report. Its door-to-door and Google numbers predate the v2 work and the bus-only Google comparison; the numbers above and in `ARCHITECTURE_AND_BENCHMARK.md` are the current ones.
+
 **Source of truth:** `E:\hackathon-project` on the Windows machine (git repo). Raw data: `E:\hackathon-data` (read-only). Heavy processing output: `E:\hackathon-work`.
 
 **Start here:** read this file, then [`docs/LOG.md`](docs/LOG.md) for what happened and what's next.
+
+**Reproducing on another machine (Linux, macOS or Windows):** see [`REPRODUCE.md`](REPRODUCE.md): data downloads and
+checksums, pinned environment (`requirements-pipeline.txt`), every pipeline stage with commands, and a map from each
+reported number to the command and file that produce it. Paths default to this Windows machine and are set with
+`DATA_DIR`, `WORK_DIR`, `GTFS_DIR` and `MODEL_DIR`.
 
 ## How it works
 
@@ -21,7 +38,8 @@ model/route_patterns.csv  stop sequence of each route
    │
    ▼
 planner/  (GTFS network + RAPTOR router + FastAPI + Leaflet map)
-   │  + model/v3/  XGBoost ride-time correction (on by default, V3_MODE=xgb; V3_MODE=off disables)
+   │  + model/v3/  XGBoost ride-time correction (V3_MODE=xgb, applied to bus legs >= 60 min: V3_MIN_RIDE_S=3600; V3_MODE=off disables)
+   │  + pooled waits over parallel routes from GPS stop visits (V2_WAIT=pooled; V2_WAIT=v1 = headway/2)
    │  + realtime/  live GPS conditions (28 Oct replayed as a live feed, ?realtime=1)
    GET /journey?from=Kashmere Gate&to=Nehru Place&depart=2026-10-27T08:30
    GET /journey?from_lat=..&from_lng=..&to_lat=..&to_lng=..&depart=2026-10-20T09:00
@@ -43,7 +61,9 @@ Validation: model built from 1–24 Oct; 25–31 Oct held out. `planner/evaluate
 | `realtime/` | Real-time layer (replayed live feed). Details: [`realtime/README.md`](realtime/README.md) |
 | `eval/` | Test pairs, actual-ride and Google Maps comparison. Details: [`eval/README.md`](eval/README.md) |
 | `docs/report/report.pdf` | Technical note and validation report |
-| `sync.sh` | Old Mac→Windows sync script. Not used any more: commit directly in this repo |
+| `REPRODUCE.md` | Full reproduction guide (data, environment, pipeline, results map) |
+| `requirements-pipeline.txt` | Pinned versions for the whole pipeline; `planner/requirements-lock.txt` for the API venv |
+| `sync.sh` | Obsolete Mac→Windows sync script. **Do not run it** (it would overwrite this repo); kept for history only |
 
 ## Data (on Windows, `E:\hackathon-data`)
 
@@ -81,13 +101,14 @@ python -m venv .venv
 .venv\Scripts\python preprocess.py
 .venv\Scripts\python -m uvicorn app:app --port 8000
 ```
-`requirements.txt` pins `xgboost==2.1.4`. Without xgboost the planner still runs but skips the final XGBoost
+`requirements.txt` pins `xgboost==2.1.4`; `requirements-lock.txt` pins every package as installed on the production venv. Without xgboost the planner still runs but skips the final XGBoost
 correction; `GET /health` shows which is active (`ride_correction`).
 
 Served defaults ("config C", since 2026-11-24): XGBoost ride correction only on bus legs of 60 min or more
 (`V3_MIN_RIDE_S=3600`) and pooled waits over parallel routes (`V2_WAIT=pooled`) from the stop-visits index
-`POOLED_INDEX` (default `E:\hackathon-work\v2\planner\pooled_index_visits_1-24.npz`, built by
-`planner/build_pooled_index.py --source visits --days 1-24`) plus `stop_headways_v2.csv`. Without these files the
+`POOLED_INDEX` (default `%WORK_DIR%\v2\planner\pooled_index_visits_1-24.npz`, i.e. `E:\hackathon-work\...`, built by
+`planner/build_pooled_index.py --source visits --days 1-24`) plus `stop_headways_v2.csv` (`V2_HEADWAYS`, default
+`model/v2/` then `%WORK_DIR%\v2\data\`). Without these files the
 planner uses v1 waits. Roll back with `set V2_WAIT=v1` and `set V3_MIN_RIDE_S=0` before starting. `GET /health`
 shows the active values under `flags`.
 
@@ -98,15 +119,16 @@ shows the active values under `flags`.
 | Static GTFS | `GTFS_DIR`, default `../data/gtfs`, then `E:\hackathon-data\gtfs` | No (official data) | Required |
 | Model tables `model/segment_times.csv`, `stop_headways.csv`, `route_patterns.csv`, `holdout_trips.csv` (~133 MB) | `MODEL_DIR`, default `model/` | No (too big, gitignored) | Planner falls back to timetable times × a fitted hour-of-day factor, much less accurate |
 | XGBoost model `model/v3/xgb_final.json`, `v3_lookup.npz` | `model/v3/` | Yes | Correction skipped |
-| Real-time replay `realtime/data/` | `realtime/` | No (gitignored) | `?realtime=1` answers with historical times only |
+| Pooled-wait index + `stop_headways_v2.csv` (~300 MB) | `POOLED_INDEX`, `V2_HEADWAYS` (under `WORK_DIR`) | No | v1 waits (headway/2) |
+| Real-time replay `replay_28.npz` (73 MB) | `realtime/data/`, then `%WORK_DIR%\realtime\` | No (gitignored) | `?realtime=1` answers with historical times only |
 
 To regenerate the model tables from the raw GPS (about 1 hour on the Windows machine), follow
-[`model/README_model.md`](model/README_model.md) "How to run": `build_patterns.py` → `run_all.py` (per-day
-`process_day.py`) → `aggregate.py`. The real-time replay is built by `realtime/scripts/extract_replay.py`.
+[`REPRODUCE.md`](REPRODUCE.md) section 4: `build_patterns.py` → `run_all.py` (per-day `process_day.py`) →
+`aggregate.py` (the served tables are `E:\hackathon-work\out_train2`). The real-time replay is built by `realtime/scripts/extract_replay.py`.
 To hand the system to someone without the raw GPS, copy the four model CSVs into their `model/` folder.
 
 ## Working together
 
-- Two people + Claude agents. Code started on the Mac and was synced with `sync.sh`.
+- Two people + Claude agents. Code started on the Mac and was synced with `sync.sh` (obsolete).
 - **Edit here on Windows and commit with git. Don't use `sync.sh`** (it would overwrite changes made here).
 - Log progress and decisions in `docs/LOG.md`.

@@ -1,14 +1,14 @@
 """Process one day of DTC GPS into per-trip stop passing times.
-Usage: python process_day.py DD   -> E:\\hackathon-work\\pass\\pass_DD.npz
+Usage: python process_day.py DD   -> $WORK_DIR/pass/pass_DD.npz (default WORK_DIR=E:\\hackathon-work, DATA_DIR=E:\\hackathon-data)
 Arrays saved: route(int32), trip(int32), veh(int32), seq(int16), stop(int32), t(float64 unix s)
 """
 import sys, sqlite3, time, os, collections
 from array import array
 import numpy as np
 
-W = r"E:\hackathon-work"
+W = os.environ.get("WORK_DIR", r"E:\hackathon-work")  # env WORK_DIR (route_shapes.csv, route_patterns.csv in; pass/ out)
 DD = sys.argv[1]
-DB = rf"E:\hackathon-data\bus-gps\bus_movements_2026_10_{DD}.db"
+DB = os.path.join(os.environ.get("DATA_DIR", r"E:\hackathon-data"), "bus-gps", f"bus_movements_2026_10_{DD}.db")  # env DATA_DIR
 LIMIT = int(sys.argv[2]) if len(sys.argv) > 2 else 0
 LAT0 = 28.6
 KX = 111320.0 * np.cos(np.radians(LAT0)); KY = 110540.0
@@ -47,7 +47,10 @@ for r, pts in shapes.items():
 PAIR = {}
 import csv
 by = collections.defaultdict(dict)
-with open(os.path.join(W, "routes.txt"), encoding="utf-8") as f:
+RT = os.path.join(W, "routes.txt")  # the v1 run used a copy of GTFS routes.txt in WORK_DIR
+if not os.path.exists(RT):
+    RT = os.path.join(os.environ.get("GTFS_DIR") or os.path.join(os.environ.get("DATA_DIR", r"E:\hackathon-data"), "gtfs"), "routes.txt")
+with open(RT, encoding="utf-8") as f:
     for row in csv.DictReader(f):
         sn = row["route_short_name"].strip().upper()
         for suf in ("UP", "DOWN"):

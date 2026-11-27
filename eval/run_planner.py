@@ -8,7 +8,7 @@ import argparse, json, os, time, urllib.parse, urllib.request
 import numpy as np, pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-GTFS = os.path.join(HERE, "..", "data", "gtfs")
+GTFS = os.environ.get("GTFS_DIR") or next((p for p in (os.path.join(HERE, "..", "data", "gtfs"), os.path.join(os.environ.get("DATA_DIR", r"E:\hackathon-data"), "gtfs")) if os.path.exists(os.path.join(p, "stops.txt"))), os.path.join(HERE, "..", "data", "gtfs"))
 
 
 def load_sched():

@@ -1,6 +1,7 @@
 """Observed (GPS) bus ride times for the test pairs on the held-out days 25-31 Oct.
 
-Runs on the Mac, ships a small job to Windows over the SSH master connection, reads the data agent's
+Runs locally when the stop-passing files are on this machine (--pass-dir, default $WORK_DIR/pass), else (or with
+--ssh) ships the same small job to the Windows box over the SSH master connection. Reads the data agent's
 per-day stop-passing files E:\\hackathon-work\\pass\\pass_DD.npz (route, trip, veh, seq, stop, t) and,
 for every direct test pair, finds held-out weekday trips on the pair's ticket routes that pass the
 boarding stop and later the alighting stop, departing within +-1 h of the pair's departure hour.
@@ -8,20 +9,20 @@ Output: eval/actual_rides.csv (pair_id, n_obs, actual_median_s, actual_p25_s, ac
 
   ../planner/.venv/bin/python actual_rides.py [--days 25,26,27,28,29,30,31]
 """
-import argparse, io, json, os, subprocess
+import argparse, io, json, os, subprocess, sys
 import pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-GTFS = os.path.join(HERE, "..", "data", "gtfs")
+GTFS = os.environ.get("GTFS_DIR") or next((p for p in (os.path.join(HERE, "..", "data", "gtfs"), os.path.join(os.environ.get("DATA_DIR", r"E:\hackathon-data"), "gtfs")) if os.path.exists(os.path.join(p, "stops.txt"))), os.path.join(HERE, "..", "data", "gtfs"))
 SSH = ["ssh", "-o", f"ControlPath={os.path.expanduser('~')}/.ssh/cm-%r@%h:%p", "-o", "BatchMode=yes",
        "-o", "LogLevel=ERROR", "<user>@<windows-host>", "python -"]
 
 REMOTE = r'''
-import json, sys, datetime, numpy as np
+import json, os, sys, datetime, numpy as np
 J = json.loads(PAYLOAD)
 rows = []
 for d in J["days"]:
-    p = r"E:\hackathon-work\pass\pass_%s.npz" % d
+    p = os.path.join(J["pass_dir"], "pass_%s.npz" % d)
     try:
         z = np.load(p)
     except Exception as e:
@@ -52,6 +53,10 @@ print(json.dumps(rows))
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--days", default="25,26,27,28,29,30,31")
+    ap.add_argument("--pass-dir", default=os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "pass"),
+                    help="folder with pass_DD.npz (default $WORK_DIR/pass)")
+    ap.add_argument("--ssh", action="store_true", help="run the scan on the Windows box over SSH (the original Mac setup); "
+                    "default: run locally when --pass-dir exists here")
     args = ap.parse_args()
     P = pd.read_csv(os.path.join(HERE, "test_pairs.csv"), dtype={"from_stop_id": str, "to_stop_id": str})
     routes = pd.read_csv(os.path.join(GTFS, "routes.txt"), dtype={"route_id": str})
@@ -61,9 +66,10 @@ def main():
         rids = sorted({int(x) for rt in str(r.routes).split("|") for x in s2r.get(rt.upper(), []) if x.isdigit()})
         if rids and r.from_stop_id.isdigit() and r.to_stop_id.isdigit():
             pairs.append(dict(pid=r.pair_id, rids=rids, a=int(r.from_stop_id), b=int(r.to_stop_id), hour=int(r.depart[11:13])))
-    payload = json.dumps(dict(days=args.days.split(","), pairs=pairs))
+    payload = json.dumps(dict(days=args.days.split(","), pairs=pairs, pass_dir=args.pass_dir))
     code = "PAYLOAD = " + json.dumps(payload) + "\n" + REMOTE
-    out = subprocess.run(SSH, input=code, capture_output=True, text=True, timeout=1800)
+    cmd = SSH if (args.ssh or not os.path.isdir(args.pass_dir)) else [sys.executable, "-"]
+    out = subprocess.run(cmd, input=code, capture_output=True, text=True, timeout=1800)
     if out.returncode:
         raise SystemExit(out.stderr)
     print(out.stderr.strip())

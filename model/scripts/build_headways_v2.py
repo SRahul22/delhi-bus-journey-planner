@@ -12,7 +12,7 @@ wait uniform within it): solves sum(max(H - w, 0)) = 0.15 * sum(H). Equals the M
 """
 import sys, os, time
 import numpy as np, pandas as pd
-W = r"E:\hackathon-work\v2\data"
+W = os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "v2", "data")  # env WORK_DIR
 IST = 19800; MERGE_S = 600; MAXGAP = 3 * 3600
 HOLIDAYS = {int(x) for x in os.environ.get("HOLIDAYS", "02,20").split(",") if x.strip()}
 t0 = time.time()

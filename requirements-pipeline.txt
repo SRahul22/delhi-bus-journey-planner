@@ -1,0 +1,16 @@
+# Pinned environment for the whole pipeline: GPS processing, model tables, v3 ML, planner/API, realtime, eval, tests.
+# Versions are the ones installed on the Windows build machine (Python 3.12.2, 2026-11-24): system python (pipeline,
+# ML, eval) + planner\.venv (API). Trimmed to what the code imports. See REPRODUCE.md.
+#   python -m venv .venv-repro && .venv-repro/bin/pip install -r requirements-pipeline.txt   (Windows: .venv-repro\Scripts\pip)
+numpy==2.5.5
+pandas==3.1.1
+scipy==1.18.1          # stop_visits.py (cKDTree), planner
+pyarrow==26.0.1        # parquet files of model/v3 and eval (not needed by the API)
+xgboost==2.1.4         # 2.1.4 exactly: 3.x silently falls back to CPU on the build machine's CUDA 12.6 driver
+fastapi==0.165.0
+uvicorn==0.54.0
+httpx==0.28.1          # fastapi TestClient (planner tests, bench_latency.py)
+pytest==9.2.0
+# Only for the LightGBM comparison in model/v3/scripts/train.py (not served, not needed for the final XGBoost model):
+lightgbm==4.7.0
+scikit-learn==1.9.1

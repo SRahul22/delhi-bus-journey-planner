@@ -23,7 +23,7 @@ ATTRACT = 1.1  # attractive set: ride time <= 1.1 x best
 MIN_GAPS = 20  # minimum observed gaps (over all matching days) before the pooled wait replaces v1
 HOLIDAYS = {2, 20}  # Oct 2026: Gandhi Jayanti, Dussehra (pooled with weekends, section 4)
 DEFAULT_WAIT = "gaps"  # config F; keep in sync with ttmodel.DEFAULT_V2_WAIT
-DEFAULT_INDEX = r"E:\hackathon-work\v2\planner\pooled_index_visits_1-24.npz"  # stop-visits index, days 1-24
+DEFAULT_INDEX = os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "v2", "planner", "pooled_index_visits_1-24.npz")  # stop-visits index, days 1-24; env POOLED_INDEX or WORK_DIR
 
 
 def wait_mode():

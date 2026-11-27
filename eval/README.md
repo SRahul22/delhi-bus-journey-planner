@@ -45,6 +45,10 @@ No Google Maps API key is available (`GOOGLE_MAPS_API_KEY` is not set), and noth
 
 ## Re-running
 
+Current, OS-independent commands: [`../REPRODUCE.md`](../REPRODUCE.md) section 6. `actual_rides.py` now runs locally when
+the pass files are on the same machine (`--pass-dir`, default `$WORK_DIR/pass`); `--ssh` keeps the old Mac→Windows mode.
+The commands below are the original Mac workflow.
+
 ```bash
 # Windows aggregation (only needed once)
 cat eval/agg_tickets.py | $S "python -"   # writes E:\hackathon-work\eval\od_route.csv, stop_names.csv

@@ -1,6 +1,6 @@
 import csv, collections, datetime, json, os
-src=r"E:\hackathon-data\ticketing\October-Delhi.csv"
-out=r"E:\hackathon-work\eval"
+src=os.path.join(os.environ.get("DATA_DIR", r"E:\hackathon-data"), "ticketing", "October-Delhi.csv")
+out=os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "eval")
 os.makedirs(out,exist_ok=True)
 od=collections.Counter(); odh=collections.defaultdict(lambda:[0]*24); stops=collections.Counter()
 hours=collections.Counter(); dow=collections.Counter(); n=0

@@ -22,7 +22,7 @@ import numpy as np
 IST = timezone(timedelta(hours=5, minutes=30))
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_REPLAY = next((p for p in (os.path.join(HERE, "data", "replay_28.npz"),
-                       "E:/hackathon-work/realtime/replay_28.npz") if os.path.exists(p)),
+                       os.path.join(os.environ.get("WORK_DIR", r"E:\hackathon-work"), "realtime", "replay_28.npz")) if os.path.exists(p)),
                       os.path.join(HERE, "data", "replay_28.npz"))
 
 

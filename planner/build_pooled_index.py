@@ -15,7 +15,8 @@ import time
 
 import numpy as np
 
-PASS = r"E:\hackathon-work\pass"
+WORK = os.environ.get("WORK_DIR", r"E:\hackathon-work")  # env WORK_DIR
+PASS = os.path.join(WORK, "pass")
 IST = 19800
 
 ap = argparse.ArgumentParser()
@@ -24,8 +25,8 @@ ap.add_argument("--out", default=None)
 ap.add_argument("--source", choices=["pass", "visits"], default="pass")
 a = ap.parse_args()
 d0, d1 = map(int, a.days.split("-"))
-out = a.out or rf"E:\hackathon-work\v2\planner\pooled_index_{'visits_' if a.source == 'visits' else ''}{d0}-{d1}.npz"
-VISITS = r"E:\hackathon-work\v2\data"
+out = a.out or os.path.join(WORK, "v2", "planner", f"pooled_index_{'visits_' if a.source == 'visits' else ''}{d0}-{d1}.npz")
+VISITS = os.path.join(WORK, "v2", "data")
 t0 = time.time()
 S, R, V, D, T = [], [], [], [], []
 for dd in range(d0, d1 + 1):
