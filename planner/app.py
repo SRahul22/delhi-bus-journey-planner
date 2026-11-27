@@ -92,7 +92,10 @@ def health():
                 models_loaded=MODELS_LOADED, admin_enabled=ADMIN_TOKEN is not None,
                 flags=dict(V2_WAIT=v2ext.wait_mode(), V2_BAND=os.environ.get("V2_BAND", "0"),
                            V3_MIN_RIDE_S=router.v3_min_ride_s(),
-                           POOLED_INDEX=os.environ.get("POOLED_INDEX", v2ext.DEFAULT_INDEX)))
+                           wait_knobs=getattr(planner.model, "wait_knobs", None),
+                           V2_HEADWAYS=getattr(planner.model, "wait_headways", None),
+                           POOLED_INDEX=(os.environ.get("POOLED_INDEX", v2ext.DEFAULT_INDEX)
+                                         if v2ext.wait_mode() == "pooled" else None)))
 
 
 def _resolve(text, lat, lng, name):

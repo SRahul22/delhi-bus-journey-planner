@@ -1,8 +1,10 @@
 """v2 planner extensions (AGENTS.md section 8): band maths and on-time probability (T2.4),
-pooled waits over parallel routes (T2.2). Since 2026-11-24 (config C) V2_WAIT defaults to pooled; V2_BAND stays opt-in.
+pooled waits over parallel routes (T2.2). Since 2026-11-27 V2_WAIT defaults to gaps (config F, ttmodel.py);
+pooled (config C, 2026-11-24) is the rollback. V2_BAND stays opt-in.
 
 Flags
-  V2_WAIT=pooled   (default) pooled waits over the attractive route set (T2.2). Index file: POOLED_INDEX
+  V2_WAIT=gaps     (default, config F) stop-visit gap waits with the v2/waits knobs, see ttmodel.py.
+  V2_WAIT=pooled   (config C, rollback) pooled waits over the attractive route set (T2.2). Index file: POOLED_INDEX
                    (default E:\\hackathon-work\\v2\\planner\\pooled_index_visits_1-24.npz, stop-visits index,
                    days 1-24). If the index is missing, the pooled overlay is skipped. V2_WAIT=v1 rolls back.
   V2_BAND=1        journey band combined in log-normal space (A3) + door-to-door shift if
@@ -20,7 +22,7 @@ WAIT_CAP = 1200.0
 ATTRACT = 1.1  # attractive set: ride time <= 1.1 x best
 MIN_GAPS = 20  # minimum observed gaps (over all matching days) before the pooled wait replaces v1
 HOLIDAYS = {2, 20}  # Oct 2026: Gandhi Jayanti, Dussehra (pooled with weekends, section 4)
-DEFAULT_WAIT = "pooled"  # config C
+DEFAULT_WAIT = "gaps"  # config F; keep in sync with ttmodel.DEFAULT_V2_WAIT
 DEFAULT_INDEX = r"E:\hackathon-work\v2\planner\pooled_index_visits_1-24.npz"  # stop-visits index, days 1-24
 
 

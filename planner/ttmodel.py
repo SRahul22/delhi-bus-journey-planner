@@ -7,7 +7,13 @@ Segment ride-time lookup order (per route segment, hour 0-23 IST, daytype weekda
      (factor fitted from observed/scheduled ratios when model tables exist, else a prior profile)
   4. distance / fallback speed
 Wait at a stop = min(headway/2, WAIT_CAP) from observed stop_headways.csv, else GTFS trips/hour.
-V2_WAIT=gaps (v2 T2.1): mean(H^2)/(2 mean(H)) from stop_headways_v2.csv (raw stop-visit gaps) where n >= 20.
+V2_WAIT=gaps (v2 T2.1, DEFAULT since 2026-11-27 = config F): mean(H^2)/(2 mean(H)) from stop_headways_v2.csv
+  (raw stop-visit gaps, days 1-24) where n >= V2_WAIT_MIN_N.
+  v2/waits knobs: V2_WAIT_MIN_N (min gaps per cell), V2_WAIT_CAP (cap on gap waits, s), V2_WAIT_FILL=1 (stop-route
+  hours with no bus within 3 h get the cap), V2_WAIT_UNOBS=1 (stop-routes with no gap data at all: timetable wait x
+  median(gap wait / v1 wait) of well-observed cells, capped). Defaults depend on V2_WAIT: gaps -> config F
+  (3 / 3600 / 1 / 1); pooled or v1 -> the old values (20 / 1200 / 0 / 0), so V2_WAIT=pooled alone restores config C
+  and V2_WAIT=v1 V3_MIN_RIDE_S=0 restores v1. Each knob can still be set explicitly.
 
 Everything is materialised into dense numpy arrays per route at load time, so the router
 does O(1) lookups:  seg[r]  float32 [nseg, 2, 24]   (daytype 0=weekday 1=weekend)
@@ -25,7 +31,49 @@ from paths import model_dir
 MODEL_DIR = model_dir()
 MIN_N = 3
 WAIT_CAP = 20 * 60
-V2_WAIT_MIN_N = int(os.environ.get("V2_WAIT_MIN_N", 20))  # min gaps per (stop, route, hour, daytype) cell for V2_WAIT=gaps
+DEFAULT_V2_WAIT = "gaps"  # config F (docs/handoff/v2-waits.md); keep in sync with v2ext.DEFAULT_WAIT
+# knob defaults per wait mode: gaps = config F; pooled / v1 = the values before v2/waits (config C / v1)
+WAIT_KNOBS_F = dict(V2_WAIT_MIN_N="3", V2_WAIT_CAP="3600", V2_WAIT_FILL="1", V2_WAIT_UNOBS="1")
+WAIT_KNOBS_OLD = dict(V2_WAIT_MIN_N="20", V2_WAIT_CAP=str(WAIT_CAP), V2_WAIT_FILL="0", V2_WAIT_UNOBS="0")
+DEFAULT_V2_HEADWAYS = r"E:\hackathon-work\v2\data\stop_headways_v2.csv"  # gap table, days 1-24
+
+
+def v2_wait_mode():
+    return os.environ.get("V2_WAIT", DEFAULT_V2_WAIT).lower()
+
+
+def _knob(name):
+    d = WAIT_KNOBS_F if v2_wait_mode() == "gaps" else WAIT_KNOBS_OLD
+    return os.environ.get(name) or d[name]
+
+
+def v2_wait_min_n():
+    """V2_WAIT_MIN_N, read at model load (default 3 with V2_WAIT=gaps, else 20)."""
+    return int(float(_knob("V2_WAIT_MIN_N")))
+
+
+def v2_wait_cap():
+    """V2_WAIT_CAP seconds for gap waits (default 3600 with V2_WAIT=gaps, else WAIT_CAP = 1200 as v1)."""
+    return float(_knob("V2_WAIT_CAP"))
+
+
+def v2_wait_fill():
+    """V2_WAIT_FILL=1: stop-route hours with no gap data (but data at other hours) get the cap. Default 1 with gaps, else 0."""
+    return _knob("V2_WAIT_FILL") == "1"
+
+
+def v2_wait_unobs():
+    """V2_WAIT_UNOBS=1: stop-routes with no gap data get the timetable wait x a factor learned from the gap table.
+    Default 1 with gaps, else 0."""
+    return _knob("V2_WAIT_UNOBS") == "1"
+
+
+def wait_knobs():
+    """Effective wait settings (for /health)."""
+    return dict(V2_WAIT=v2_wait_mode(), V2_WAIT_MIN_N=v2_wait_min_n(), V2_WAIT_CAP=v2_wait_cap(),
+                V2_WAIT_FILL=int(v2_wait_fill()), V2_WAIT_UNOBS=int(v2_wait_unobs()))
+
+
 NO_SERVICE_WAIT = 45 * 60  # wait if no trip in that hour at all (penalised, router may still use it)
 FALLBACK_SPEED = 15 / 3.6  # m/s
 
@@ -210,21 +258,51 @@ class TravelTimeModel:
         # v2 T2.1 (V2_WAIT=gaps|pooled): expected wait of a random arrival from raw stop-visit gaps,
         # mean(H^2) / (2 mean(H)), capped at WAIT_CAP, where the cell has n >= V2_WAIT_MIN_N gaps; else v1 value.
         wait85 = (wait * 1.7).astype(np.float32)  # v1 fallback: fixed headway H gives uniform wait, p85 = 0.85 H = 1.7 x mean
-        self.wait_mode = os.environ.get("V2_WAIT", "pooled").lower()  # default pooled (config C); V2_WAIT=v1 rolls back
+        self.wait_mode = v2_wait_mode()  # default gaps (config F); V2_WAIT=pooled -> config C, V2_WAIT=v1 -> v1
+        self.wait_knobs = wait_knobs()
+        self.wait_headways = None
         if self.wait_mode in ("gaps", "pooled"):
             hw2 = os.environ.get("V2_HEADWAYS") or next((p for p in (os.path.join(self.model_dir, "v2", "stop_headways_v2.csv"),
-                                                                       r"E:\hackathon-work\v2\data\stop_headways_v2.csv") if os.path.exists(p)), None)
+                                                                       DEFAULT_V2_HEADWAYS) if os.path.exists(p)), None)
             n_v2 = 0
             if hw2 and os.path.exists(hw2):
                 h2 = pd.read_csv(hw2, dtype={"route_id": str, "stop_id": str})
-                h2 = h2[(h2.n >= V2_WAIT_MIN_N) & h2.hour.between(0, 23) & (h2.expected_wait_s > 0)]
+                h2 = h2[(h2.n >= v2_wait_min_n()) & h2.hour.between(0, 23) & (h2.expected_wait_s > 0)]
                 h2["dt"] = (h2.daytype.astype(str).str.lower() == "weekend").astype(np.int8)
                 rid = np.array([r["route_id"] for r in routes])
                 key = pd.DataFrame(dict(pos=np.arange(nst), route_id=rid[SR], stop_id=stop_ids[SS]))
                 m = key.merge(h2, on=["route_id", "stop_id"])
-                wait[m.pos.values, m.dt.values, m.hour.values] = np.minimum(m.expected_wait_s.values, WAIT_CAP)
+                # v2/waits: V2_WAIT_CAP (default WAIT_CAP = v1's 1200 s) caps gap waits; V2_WAIT_FILL=1 gives the cap
+                # to hours where this stop-route has gap data at other hours of the day type but none at this hour
+                # (no bus within 3 h), instead of the timetable wait. Both only touch stop-routes in the gap table.
+                cap = v2_wait_cap()
+                seen = np.zeros((nst, 2), bool)
+                seen[m.pos.values, m.dt.values] = True
+                if v2_wait_unobs() and len(m):
+                    # V2_WAIT_UNOBS=1: stop-routes (per day type) with no gap data at all keep the timetable / v1
+                    # wait, which is optimistic for the same reasons as v1 (median/2, bunching, GTFS frequency).
+                    # Scale them by the median ratio gap wait / v1 wait over well-observed cells (n >= 20) of the
+                    # same gap table (so the factor comes from the table's days only), capped at the cap.
+                    ref = m[m.n >= 20]
+                    if len(ref):
+                        v1w = wait[ref.pos.values, ref.dt.values, ref.hour.values]
+                        f = float(np.median(ref.expected_wait_s.values / np.maximum(v1w, 1.0)))
+                        un = ~seen
+                        wait[un] = np.minimum(wait[un] * f, cap)
+                        wait85[un] = 1.7 * wait[un]
+                        self.stats["wait_unobs_factor"] = round(f, 3)
+                        self.stats["wait_stop_routes_unobs"] = int(un.sum())
+                if v2_wait_fill() and len(m):
+                    has = np.zeros((nst, 2, 24), bool)
+                    has[m.pos.values, m.dt.values, m.hour.values] = True
+                    fill = seen[:, :, None] & ~has
+                    wait[fill] = cap
+                    wait85[fill] = 1.7 * cap
+                    self.stats["wait_cells_v2_filled"] = int(fill.sum())
+                wait[m.pos.values, m.dt.values, m.hour.values] = np.minimum(m.expected_wait_s.values, cap)
                 wait85[m.pos.values, m.dt.values, m.hour.values] = np.maximum(m.wait_p85_s.values, m.expected_wait_s.values)
                 n_v2 = len(m)
+                self.wait_headways = hw2
             else:
                 print("V2_WAIT=%s but stop_headways_v2.csv not found; using v1 waits" % self.wait_mode)
             self.stats["wait_cells_v2_gaps"] = n_v2
