@@ -53,7 +53,7 @@ a{color:var(--accent)}
     <div class="stat"><b>12.3%</b><span>typical error on time on the bus, 600,000 held-out rides (timetable: 27.9%)</span></div>
     <div class="stat"><b>9.4%</b><span>error vs real bus rides on bus-only trips (Google Maps: 16.6%)</span></div>
     <div class="stat"><b>107 s</b><span>next-bus arrival error with live positions (half-headway guess: 503 s)</span></div>
-    <div class="stat"><b>~0.3 s</b><span>typical API response time</span></div>
+    <div class="stat"><b>19.6%</b><span>door-to-door error incl. waits, 5,300 replayed trips (first version: 28.3%)</span></div>
   </div>
 
   <h2>How it works</h2>
@@ -74,11 +74,19 @@ a{color:var(--accent)}
     <tr><td>Bus-only trips vs actual rides (13)</td><td class="win">9.4%</td><td>–</td><td>16.6%</td></tr>
     <tr><td>Within ±20% of actual, same 13 trips</td><td class="win">12 of 13</td><td>–</td><td>7 of 13</td></tr>
   </table></div>
+  <p style="margin-top:16px"><b>Whole journey, door to door</b> (walk + wait + ride + transfers), each plan replayed on the buses that really ran, 5,300 trips in the held-out week:</p>
+  <div class="tablewrap"><table>
+    <tr><th></th><th>First version</th><th>Final (bus-gap waits)</th></tr>
+    <tr><td>Door-to-door median error</td><td>28.3%</td><td class="win">19.6%</td></tr>
+    <tr><td>Trips within ±20%</td><td>37%</td><td class="win">51%</td></tr>
+    <tr><td>Plan too short by (median)</td><td>23 min</td><td class="win">10 min</td></tr>
+    <tr><td>Error in the first wait</td><td>−8.5 min</td><td class="win">−1.4 min</td></tr>
+  </table></div>
   <p style="margin-top:12px">Example, Mahipalpur → Andheria More at 18:30: Google 24 min, ours 36 min, real buses 42 min. Google tends to underestimate Delhi bus times at peak hour.</p>
 
   <h2>Known limits and what's next</h2>
-  <div class="note">Waiting at the stop is the weak part. Door to door, including waits, the first version plans about 20 minutes too short, because buses bunch and real waits are longer than "half the gap between buses". A new wait model brings the door-to-door error from 26.6% to about 19% on validation days; its final held-out test is in progress.</div>
-  <p style="margin-top:12px">Also next: a calibrated time range ("usually 40 min, up to 48"), holidays as their own day type, and a larger Google Maps comparison including transfers.</p>
+  <div class="note">Waiting at the stop was the weak part: buses bunch, so real waits are longer than "half the usual gap". Waits from the real gaps between buses fixed most of it (door to door 28.3% → 19.6%). Still open: the "heavy traffic" range covers 70% of trips (target 85%), and a few long trips pick a slow direct route over a faster two-bus option.</div>
+  <p style="margin-top:12px">Next: a calibrated time range, live bus positions for the first wait, stricter route alternatives, holidays as their own day type, and a larger Google Maps comparison including transfers.</p>
 
   <h2>Try the API</h2>
   <p>The planner needs the October GPS-derived model tables, so it runs locally rather than on this page. With the code and tables in place:</p>
@@ -87,7 +95,7 @@ a{color:var(--accent)}
 GET /journey?from=Kashmere Gate&amp;to=Nehru Place&amp;depart=2026-10-27T08:30</code></pre>
 
   <h2>Versions</h2>
-  <p><code>main</code> is the team's latest code (24 Nov 23:29): v2 features including stop-visit and pooled waits, calibrated time bands and the live layer. Tag <code>phase1-v1</code> is the earlier snapshot that matches the technical note's numbers.</p>
+  <p><code>main</code> is the team's latest code (27 Nov): bus-gap wait model as the default, plus calibrated time bands and the live layer. Tag <code>phase1-v1</code> is the earlier snapshot that matches the technical note's numbers.</p>
 
   <footer>Data: DTC bus GPS 1–31 Oct 2026, static GTFS and e-ticketing, from the Delhi Transport Stack. Built with Python, DuckDB, Shapely, XGBoost, FastAPI and Leaflet. AI coding assistants were used during development.</footer>
 </div>
